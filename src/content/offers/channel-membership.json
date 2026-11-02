@@ -1,0 +1,9 @@
+{
+  "name": "Channel membership",
+  "category": "Memberships",
+  "description": "Monthly support for No Ghosts Found. Renews every month until cancelled.",
+  "price_usd": null,
+  "unit": "per month",
+  "delivery": "Access starts right after payment and lasts until the end of the paid month.",
+  "order": 4
+}

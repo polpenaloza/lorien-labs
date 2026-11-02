@@ -1,0 +1,88 @@
+backend:
+  name: github
+  repo: polpenaloza/lorien-labs
+  branch: main
+  auth_methods: [token]
+media_folder: public/uploads
+public_folder: /uploads
+collections:
+  - name: posts
+    label: Blog posts
+    label_singular: Blog post
+    folder: src/content/posts
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false }
+      - { label: Channel, name: channel, widget: relation, collection: channels, value_field: "{{slug}}", display_fields: [name], search_fields: [name] }
+      - { label: YouTube URL, name: video_url, widget: string, hint: "Watch, Shorts or youtu.be link" }
+      - { label: Summary, name: summary, widget: text, hint: "One or two sentences for the blog list and search results" }
+      - { label: Body, name: body, widget: richtext, default: "## The story\n\n## The analysis\n" }
+      - label: Sources
+        name: sources
+        widget: list
+        min: 1
+        hint: "Every claim needs a source. Copy these from the episode's research.md"
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: URL, name: url, widget: string, required: false }
+          - { label: Type, name: type, widget: select, options: [primary, secondary], default: secondary }
+      - { label: Draft, name: draft, widget: boolean, default: false, required: false }
+  - name: channels
+    label: Channels
+    label_singular: Channel
+    folder: src/content/channels
+    create: true
+    extension: json
+    format: json
+    slug: "{{slug}}"
+    identifier_field: name
+    fields:
+      - { label: Name, name: name, widget: string }
+      - { label: Description, name: description, widget: text }
+      - { label: YouTube URL, name: youtube, widget: string }
+      - { label: Instagram URL, name: instagram, widget: string, required: false }
+      - { label: TikTok URL, name: tiktok, widget: string, required: false }
+  - name: offers
+    label: Products and services
+    label_singular: Offer
+    folder: src/content/offers
+    create: true
+    extension: json
+    format: json
+    slug: "{{slug}}"
+    identifier_field: name
+    fields:
+      - { label: Name, name: name, widget: string }
+      - { label: Category, name: category, widget: select, options: [Services, Digital products, Memberships] }
+      - { label: Description, name: description, widget: text }
+      - { label: Price in USD, name: price_usd, widget: number, value_type: float, min: 0, required: false, hint: "Leave empty only while the price is undecided: the Stripe check fails until it is set" }
+      - { label: Billing unit, name: unit, widget: select, options: [per hour, one-time, per month] }
+      - { label: Delivery, name: delivery, widget: text, hint: "How and when the customer receives it" }
+      - { label: Purchase URL, name: buy_url, widget: string, required: false }
+      - { label: Order, name: order, widget: number, value_type: int, default: 99 }
+  - name: pages
+    label: Pages
+    label_singular: Page
+    folder: src/content/pages
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: text, required: false }
+      - { label: Last updated, name: updated, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, required: false }
+      - { label: Body, name: body, widget: richtext }
+  - name: site
+    label: Business details
+    files:
+      - name: business
+        label: Business details
+        file: src/content/site/business.json
+        fields:
+          - { label: Legal name, name: legal_name, widget: string, hint: "Must match the Stripe account exactly" }
+          - { label: Entity, name: entity, widget: string, hint: "For example: a Wyoming limited liability company" }
+          - { label: Description, name: description, widget: text }
+          - { label: Business address, name: address, widget: string, hint: "Must match Stripe. A PO Box is not accepted" }
+          - { label: Support email, name: email, widget: string }
+          - { label: Support phone, name: phone, widget: string }

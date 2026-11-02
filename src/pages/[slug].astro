@@ -1,0 +1,26 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { formatDate, getBusiness } from '../lib/site';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages');
+  return pages.map((page) => ({ params: { slug: page.id }, props: { page } }));
+}
+
+const { page } = Astro.props;
+const { Content } = await render(page);
+const business = await getBusiness();
+---
+
+<Base title={page.data.title} description={page.data.description}>
+  <article>
+    <h1>{page.data.title}</h1>
+    {page.data.updated ? <p class="meta">Last updated: {formatDate(page.data.updated)}</p> : null}
+    <Content />
+    <p>
+      Contact: {business.legal_name}, {business.address},
+      <a href={`mailto:${business.email}`}>{business.email}</a>.
+    </p>
+  </article>
+</Base>

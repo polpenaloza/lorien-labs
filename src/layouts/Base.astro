@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import { getBusiness } from '../lib/site';
+import '../styles/tokens.css';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const business = await getBusiness();
+const channels = await getCollection('channels');
+const { title, description = business.description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title} | {business.legal_name}</title>
+  </head>
+  <body>
+    <header class="wrap site-header">
+      <a href="/" class="brand">{business.legal_name}</a>
+      <nav aria-label="Main">
+        <a href="/services">Services</a>
+        <a href="/blog">Blog</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+      </nav>
+    </header>
+    <main class="wrap"><slot /></main>
+    <footer class="wrap site-footer">
+      <p>
+        <strong>{business.legal_name}</strong><br />
+        {business.address}<br />
+        <a href={`mailto:${business.email}`}>{business.email}</a> · <a href={`tel:${business.phone}`}>{business.phone}</a>
+      </p>
+      <nav aria-label="Legal">
+        <a href="/terms">Terms and Conditions</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/refunds">Refund, Cancellation and Delivery Policy</a>
+        <a href="/contact">Contact</a>
+      </nav>
+      <nav aria-label="Channels">
+        {
+          channels.map(({ data }) => (
+            <>
+              <a href={data.youtube}>{data.name} on YouTube</a>
+              {data.instagram ? <a href={data.instagram}>{data.name} on Instagram</a> : null}
+              {data.tiktok ? <a href={data.tiktok}>{data.name} on TikTok</a> : null}
+            </>
+          ))
+        }
+      </nav>
+      <p class="meta">Card payments are processed securely by Stripe. We never see or store your card number.</p>
+    </footer>
+  </body>
+</html>

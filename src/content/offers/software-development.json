@@ -1,0 +1,9 @@
+{
+  "name": "Software development",
+  "category": "Services",
+  "description": "Design and development of web applications for businesses, with a focus on React and TypeScript front ends. Scope, schedule and deliverables are agreed in writing before work starts.",
+  "price_usd": null,
+  "unit": "per hour",
+  "delivery": "Delivered remotely as agreed in the written scope, usually to the client's code repository.",
+  "order": 1
+}

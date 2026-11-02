@@ -1,0 +1,16 @@
+/* Placeholder values until the design lands. Pages only use these tokens, so the design swaps them here. */
+:root {
+  color-scheme: light dark;
+
+  --font-body: system-ui, sans-serif;
+
+  --color-ink: light-dark(#1c1f24, #e8e6e1);
+  --color-paper: light-dark(#fbfaf7, #14161a);
+  --color-muted: light-dark(#5b6068, #a2a6ad);
+  --color-line: light-dark(#dcdcd6, #33363c);
+  --color-link: light-dark(#1f4fb8, #8fb3ff);
+
+  --content-width: 46rem;
+  --space-gutter: 1rem;
+  --space-section: 2.5rem;
+}

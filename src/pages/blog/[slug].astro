@@ -1,0 +1,44 @@
+---
+import { getEntry, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { formatDate, getPublishedPosts } from '../../lib/site';
+import { youtubeId } from '../../lib/youtube';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const channel = await getEntry(post.data.channel);
+---
+
+<Base title={post.data.title} description={post.data.summary}>
+  <article>
+    <p class="meta">
+      {formatDate(post.data.date)} · <a href={channel.data.youtube}>{channel.data.name}</a>
+    </p>
+    <h1>{post.data.title}</h1>
+    <div class="video">
+      <iframe
+        src={`https://www.youtube-nocookie.com/embed/${youtubeId(post.data.video_url)}`}
+        title={post.data.title}
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+    <Content />
+    <h2>Sources</h2>
+    <ul>
+      {
+        post.data.sources.map((source) => (
+          <li>
+            {source.url ? <a href={source.url}>{source.title}</a> : source.title}
+            <span class="meta"> ({source.type})</span>
+          </li>
+        ))
+      }
+    </ul>
+  </article>
+</Base>

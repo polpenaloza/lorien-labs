@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const offers = (await getCollection('offers')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base title="Services and prices" description="What Lorien Labs LLC sells, with prices in US dollars.">
+  <h1>Services and prices</h1>
+  <p>All prices are in US dollars (USD). Taxes, where they apply, are shown at checkout.</p>
+  {
+    offers.map(({ data }) => (
+      <article>
+        <p class="meta">{data.category}</p>
+        <h2>{data.name}</h2>
+        <p>{data.description}</p>
+        <p>
+          <strong>{data.price_usd == null ? '[PENDING: price]' : `USD ${data.price_usd}`}</strong> {data.unit}
+        </p>
+        <p><strong>Delivery:</strong> {data.delivery}</p>
+        {data.buy_url ? <p><a href={data.buy_url}>Buy {data.name}</a></p> : null}
+      </article>
+    ))
+  }
+  <p>
+    Before you buy, please read our <a href="/terms">Terms and Conditions</a> and our
+    <a href="/refunds">Refund, Cancellation and Delivery Policy</a>. Questions? <a href="/contact">Contact us</a>.
+  </p>
+  <p class="meta">Card payments are processed securely by Stripe, a PCI DSS certified provider, over an encrypted connection. We never see or store your card number.</p>
+</Base>
