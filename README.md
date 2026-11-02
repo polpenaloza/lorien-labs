@@ -4,6 +4,8 @@ Company website: static [Astro](https://astro.build) (Vite comes with it), hoste
 
 Editors sign in at `/admin` with a GitHub token. Saving content creates a commit on `main`, and Cloudflare builds and publishes it.
 
+Code reaches `main` only through squash-merged pull requests, enforced by a repository ruleset. Repository admins can bypass it, and that bypass is what lets the CMS commit directly, so sign in to `/admin` with an admin's token.
+
 ## Develop
 
 ```bash
@@ -17,6 +19,7 @@ pnpm dev
 | `pnpm check` | Type-checks the project and the content |
 | `pnpm test` | Tests the YouTube link parser |
 | `pnpm check:stripe` | Audits `dist/` against Stripe's website requirements |
+| `pnpm logo` | Regenerates the logo files from the pixel grid in `scripts/logo.mjs` |
 
 ## Cloudflare
 
@@ -30,7 +33,7 @@ The build fails while `pnpm check:stripe` finds a problem, so a site with `[PEND
 
 ## Design
 
-The design system lives in `design/`: `tokens.json` (colours, type, spacing, radii), `README.md` (how to use them) and the logo. `src/styles/tokens.css` is the CSS form the pages use. Fonts (Pixelify Sans, Silkscreen) load from Google Fonts in `src/layouts/Base.astro`.
+The design system lives in `design/`: `tokens.json` (colours, type, spacing, radii), `README.md` (how to use them) and the logo. `src/styles/tokens.css` is its CSS form, and `uno.config.ts` maps those variables to [UnoCSS](https://unocss.dev) utilities (`bg-surface-200`, `p-4`) and shared shortcuts (`card`, `button`, `label`). Fonts (VT323, Silkscreen) load from Google Fonts in `src/layouts/Base.astro`.
 
 ## Content
 
@@ -48,7 +51,7 @@ Stripe checks the site at activation and regularly afterwards.
 
 | Requirement | Where |
 | --- | --- |
-| Business name, matching the Stripe account | Every page header and footer (`business.json`) |
+| Business name, matching the Stripe account | Every page footer and title, plus `/contact` (`business.json`) |
 | Clear description of what is sold | `/`, `/services`, `/about` |
 | Prices with explicit currency | `/services` |
 | Customer service contact beyond a form | `/contact` and every footer: email, phone, address |

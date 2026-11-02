@@ -1,110 +1,45 @@
+/* Element defaults, which CMS Markdown relies on: it can't carry classes. Everything else is UnoCSS (uno.config.ts). */
 body {
   margin: 0;
-  background: var(--color-paper);
-  color: var(--color-ink);
+  background: var(--surface-100);
+  color: var(--ink);
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 24px;
 }
 
-h1,
-h2,
-h3 {
+h3,
+strong {
   font-weight: 600;
 }
 
+/* VT323 has one weight and a 16px grid: bold or other sizes would blur its pixels. */
+h1,
+h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+}
+
 h1 {
-  font-size: 40px;
-  line-height: 44px;
+  font-size: 48px;
+  line-height: 52px;
 }
 
 h2 {
-  font-size: 28px;
-  line-height: 32px;
+  font-size: 32px;
+  line-height: 36px;
+}
+
+h3 {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+a {
+  color: var(--accent);
 }
 
 :focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
-}
-
-a {
-  color: var(--color-link);
-}
-
-.wrap {
-  max-width: var(--content-width);
-  margin-inline: auto;
-  padding-inline: var(--space-gutter);
-}
-
-.site-header,
-.site-header nav,
-.site-footer nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-gutter);
-}
-
-.site-header {
-  justify-content: space-between;
-  padding-block: var(--space-gutter);
-}
-
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  color: var(--color-ink);
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.brand img {
-  border-radius: var(--radius-0);
-}
-
-.site-footer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-gutter);
-  margin-top: var(--space-section);
-  padding-block: var(--space-section);
-  border-top: 1px solid var(--color-line);
-}
-
-.site-footer p {
-  margin: 0;
-}
-
-.meta {
-  color: var(--color-muted);
-  font-size: 14px;
-  line-height: 20px;
-}
-
-.label {
-  font-family: var(--font-label);
-  font-size: 12px;
-  line-height: 16px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.video {
-  aspect-ratio: 16 / 9;
-}
-
-.video iframe {
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-dt {
-  font-weight: 700;
-}
-
-dd {
-  margin: 0 0 var(--space-gutter);
 }

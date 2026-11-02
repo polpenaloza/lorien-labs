@@ -22,6 +22,7 @@ We use your data to answer you, deliver what you bought, handle refunds and disp
 
 - **Cloudflare** hosts this website.
 - **Stripe** processes card payments.
+- **Google Fonts** serves the fonts on this site, so your browser sends your IP address to Google when a page loads.
 - **Google (YouTube)** serves the videos embedded in our blog posts. A post's video loads from YouTube's privacy-enhanced domain, and YouTube may process your data once you play it.
 - **Storefronts** we sell through, such as Ko-fi and itch.io, handle your purchase under their own privacy policies.
 

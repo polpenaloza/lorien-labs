@@ -6,7 +6,8 @@ Lorien Labs is a tree with its roots showing: steady, grown rather than assemble
 
 ## Logo
 
-- The mark is `assets/lorien-labs-mark.png` (sized copies for the site: `public/logo.png`, `public/favicon.png`, `public/apple-touch-icon.png`): an off-white tree with leaf-blue leaves and a leaf-blue root arc, on its own navy square. The navy is part of the file, so place it on `brand-navy` or `surface-100` (dark theme), where the square disappears into the page.
+- The mark is pixel art: a 49×49 grid in `scripts/logo.mjs`. `pnpm logo` writes `assets/lorien-labs-mark.png` and the sized copies for the site (`public/logo.png`, `public/favicon.png`, `public/apple-touch-icon.png`). Show it only at multiples of 49px, with `image-rendering: pixelated`, so every pixel stays square.
+- It is an off-white tree with leaf-blue leaves and a leaf-blue root arc, on its own navy square. The navy is part of the file, so place it on `brand-navy` or `surface-100` (dark theme), where the square disappears into the page.
 - On a light page, set the mark inside a `brand-navy` tile with at least `space-4` of navy around the tree. Never place the PNG directly on paper.
 - Never recolour, outline, crop the roots or add a shadow to the mark. There is no wordmark file yet: when you need the name, set "Lorien Labs" in `display` (or `heading-1`) in `ink` beside the mark.
 
@@ -21,8 +22,9 @@ Lorien Labs is a tree with its roots showing: steady, grown rather than assemble
 
 ## Type
 
-- Two pixel faces from Google Fonts. **Pixelify Sans** (400–700) carries everything from `display` to `small`. **Silkscreen** sets `label` only, in capitals: eyebrows, tags and table headers.
-- Load both from Google Fonts: `https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Silkscreen&display=swap`.
+- Pixel faces are for short, large text; reading text gets a plain one. **VT323** sets `display`, `heading-1` and `heading-2`: titles, banners and the name beside the mark. It is drawn on a 16px grid and has one weight, so keep it at multiples of 16px and never bold: anything else blurs its pixels. **Silkscreen** sets `label` only, in capitals: eyebrows, tags and table headers. The **body** face (`system-ui`) sets `body`, `body-strong` and `small`: paragraphs, card titles, buttons, navigation and the footer.
+- Never set a sentence in a pixel face.
+- Load both pixel faces from Google Fonts: `https://fonts.googleapis.com/css2?family=VT323&family=Silkscreen&display=swap`. The body face needs no download.
 - Use one `display` per page, `heading-1` for page titles, `heading-2` for sections and `body` for running text. Don't set long copy below 16px. Keep `small` for captions in `ink-muted`.
 - Keep sizes on the scale. Pixel faces render sharpest at their set sizes, so don't scale type fluidly.
 

@@ -27,33 +27,43 @@ const { title, description = business.description } = Astro.props;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Silkscreen&display=swap"
+      href="https://fonts.googleapis.com/css2?family=VT323&family=Silkscreen&display=swap"
     />
   </head>
   <body>
-    <header class="wrap site-header">
-      <a href="/" class="brand"><img src="/logo.png" alt="" width="40" height="40" />{business.legal_name}</a>
-      <nav aria-label="Main">
-        <a href="/services">Services</a>
-        <a href="/blog">Blog</a>
-        <a href="/about">About</a>
-        <a href="/contact">Contact</a>
+    <header class="wrap flex flex-wrap items-center justify-between gap-4 py-4">
+      <a href="/" class="inline-flex items-center gap-2 text-ink font-display text-heading-2 no-underline">
+        <!-- On paper the mark needs its navy tile. On the dark page the tile disappears, so it needs no padding. -->
+        <img class="mark light:p-4" src="/logo.png" alt="" width="49" height="49" />Lorien Labs
+      </a>
+      <nav aria-label="Main" class="flex flex-wrap items-center gap-4">
+        <a class="text-ink" href="/services">Services</a>
+        <a class="text-ink" href="/blog">Blog</a>
+        <a class="text-ink" href="/about">About</a>
+        <a class="text-ink" href="/contact">Contact</a>
       </nav>
     </header>
     <main class="wrap"><slot /></main>
-    <footer class="wrap site-footer">
-      <p>
-        <strong>{business.legal_name}</strong><br />
-        {business.address}<br />
-        <a href={`mailto:${business.email}`}>{business.email}</a> · <a href={`tel:${business.phone}`}>{business.phone}</a>
-      </p>
-      <nav aria-label="Legal">
+    <footer class="mt-12 border-0 border-t border-solid border-hairline">
+      <div class="wrap grid grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] gap-6 py-12">
+      <div>
+        <p class="label m-0">Company</p>
+        <p class="m-0">
+          <strong>{business.legal_name}</strong><br />
+          {business.address}<br />
+          <a href={`mailto:${business.email}`}>{business.email}</a><br />
+          <a href={`tel:${business.phone}`}>{business.phone}</a>
+        </p>
+      </div>
+      <nav aria-label="Legal" class="flex flex-col gap-1">
+        <p class="label m-0">Legal</p>
         <a href="/terms">Terms and Conditions</a>
         <a href="/privacy">Privacy Policy</a>
         <a href="/refunds">Refund, Cancellation and Delivery Policy</a>
         <a href="/contact">Contact</a>
       </nav>
-      <nav aria-label="Channels">
+      <nav aria-label="Channels" class="flex flex-col gap-1">
+        <p class="label m-0">Channels</p>
         {
           channels.map(({ data }) => (
             <>
@@ -64,7 +74,8 @@ const { title, description = business.description } = Astro.props;
           ))
         }
       </nav>
-      <p class="meta">Card payments are processed securely by Stripe. We never see or store your card number.</p>
+      <p class="meta col-span-full m-0">Card payments are processed securely by Stripe. We never see or store your card number.</p>
+      </div>
     </footer>
   </body>
 </html>

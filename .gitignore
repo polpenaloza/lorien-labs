@@ -7,6 +7,37 @@ dist/
 .env
 .env.*
 !.env.example
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+
+# Keys and certificates
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+*.jks
+id_rsa*
+id_dsa*
+id_ecdsa*
+id_ed25519*
+
+# Credentials. Exact names only: a blog post called "the-secret-key.md" must stay tracked.
+.npmrc
+.netrc
+.pgpass
+.git-credentials
+.aws/
+.ssh/
+credentials/
+secrets/
+credentials.json
+secrets.json
+secrets.yaml
+secrets.yml
+service-account*.json
+*-service-account*.json
 
 # Editor and operating system files
 .DS_Store
