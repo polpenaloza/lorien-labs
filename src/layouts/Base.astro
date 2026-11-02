@@ -21,10 +21,18 @@ const { title, description = business.description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <title>{title} | {business.legal_name}</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Silkscreen&display=swap"
+    />
   </head>
   <body>
     <header class="wrap site-header">
-      <a href="/" class="brand">{business.legal_name}</a>
+      <a href="/" class="brand"><img src="/logo.png" alt="" width="40" height="40" />{business.legal_name}</a>
       <nav aria-label="Main">
         <a href="/services">Services</a>
         <a href="/blog">Blog</a>

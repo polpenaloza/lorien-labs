@@ -1,16 +1,57 @@
-/* Placeholder values until the design lands. Pages only use these tokens, so the design swaps them here. */
+/* Lorien Labs design system, as CSS. Source of truth: design/tokens.json (rules in design/README.md).
+   Pages only use these tokens. Dark is the primary theme; visitors whose system asks for light get the light theme. */
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
 
-  --font-body: system-ui, sans-serif;
+  /* Brand: the logo's own colours, the same in both themes */
+  --brand-navy: #1d2d3f;
+  --brand-paper: #e9e8e2;
+  --brand-leaf: #42728d;
 
-  --color-ink: light-dark(#1c1f24, #e8e6e1);
-  --color-paper: light-dark(#fbfaf7, #14161a);
-  --color-muted: light-dark(#5b6068, #a2a6ad);
-  --color-line: light-dark(#dcdcd6, #33363c);
-  --color-link: light-dark(#1f4fb8, #8fb3ff);
+  /* Surfaces and text: light-dark(light value, dark value) */
+  --surface-000: light-dark(#dcdbd3, #172536);
+  --surface-100: light-dark(#e9e8e2, #1d2d3f);
+  --surface-200: light-dark(#f4f3ee, #263f54);
+  --ink: light-dark(#1d2d3f, #e9e8e2);
+  --ink-muted: light-dark(#4e5f70, #9fb3c4);
+  --accent: light-dark(#36617a, #8fb8d1);
+  --on-accent: light-dark(#f4f3ee, #1d2d3f);
+  --hairline: light-dark(#c9ccc8, #3b5068);
+  --border-strong: light-dark(#42728d, #5f8eaa);
+  --focus-ring: light-dark(#36617a, #8fb8d1);
+
+  /* Type: Pixelify Sans for everything, Silkscreen for capital labels (loaded in Base.astro) */
+  --font-display: 'Pixelify Sans', ui-monospace, monospace;
+  --font-label: 'Silkscreen', ui-monospace, monospace;
+
+  /* Spacing: 4px grid */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* Radius: square by default */
+  --radius-0: 0px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+
+  /* Names the pages already use */
+  --font-body: var(--font-display);
+  --color-ink: var(--ink);
+  --color-paper: var(--surface-100);
+  --color-muted: var(--ink-muted);
+  --color-line: var(--hairline);
+  --color-link: var(--accent);
 
   --content-width: 46rem;
-  --space-gutter: 1rem;
-  --space-section: 2.5rem;
+  --space-gutter: var(--space-4);
+  --space-section: var(--space-12);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+  }
 }
