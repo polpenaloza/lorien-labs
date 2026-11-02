@@ -11,7 +11,7 @@ const offers = (await getCollection('offers')).sort((a, b) => a.data.order - b.d
   {
     offers.map(({ data }) => (
       <article>
-        <p class="meta">{data.category}</p>
+        <p class="meta label">{data.category}</p>
         <h2>{data.name}</h2>
         <p>{data.description}</p>
         <p>

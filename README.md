@@ -28,6 +28,10 @@ Create a Worker from the `polpenaloza/lorien-labs` GitHub repository (Workers Bu
 
 The build fails while `pnpm check:stripe` finds a problem, so a site with `[PENDING: ...]` values never goes live.
 
+## Design
+
+The design system lives in `design/`: `tokens.json` (colours, type, spacing, radii), `README.md` (how to use them) and the logo. `src/styles/tokens.css` is the CSS form the pages use. Fonts (Pixelify Sans, Silkscreen) load from Google Fonts in `src/layouts/Base.astro`.
+
 ## Content
 
 | Path | CMS collection | Notes |
