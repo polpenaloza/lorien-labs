@@ -1,6 +1,7 @@
 ---
 title: About
 description: Who Lorien Labs LLC is and what it does.
+updated: 2026-11-02
 ---
 
 Lorien Labs LLC is a small software and media company. We do three things:
