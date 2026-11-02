@@ -4,6 +4,8 @@ Company website: static [Astro](https://astro.build) (Vite comes with it), hoste
 
 Editors sign in at `/admin` with a GitHub token. Saving content creates a commit on `main`, and Cloudflare builds and publishes it.
 
+Code reaches `main` only through squash-merged pull requests, enforced by a repository ruleset. Repository admins can bypass it, and that bypass is what lets the CMS commit directly, so sign in to `/admin` with an admin's token.
+
 ## Develop
 
 ```bash
