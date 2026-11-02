@@ -178,10 +178,33 @@ const nearRange = () =>
 // stepping down terraces, one tower, two waterfalls. Drawn in faded colours, because the far mist
 // passes in front of it.
 const HOUSE = { x: 240, base: 172 };
-// Two thin waterfalls on the cliffs either side of the refuge, starting partway down the rock: [x, bottom].
-const FALLS = [[207, 168], [273, 166]];
 const far = farRange();
-const fallTop = (x) => Math.round(far.heights[x]) + 12;
+
+// A thin waterfall down the cliff: mostly slanted runs towards the valley, broken by short drops and,
+// now and then, a jog back, like water finding its way down rock. It never steps off the rock into sky.
+// `reach` caps how far it strays sideways, so it ends at the foot of the cliff, not on the buildings.
+function fallPath(x, bottom, toward, seed, reach = 10) {
+  const rand = random(seed);
+  const start = x;
+  const path = [];
+  let y = Math.round(far.heights[x]) + 8;
+  let side = toward;
+  while (y < bottom) {
+    const drop = 1 + Math.floor(rand() * 2);
+    for (let i = 0; i < drop && y < bottom; i++) path.push([x, y++]);
+    const run = 3 + Math.floor(rand() * 4);
+    for (let i = 0; i < run && y < bottom; i++) {
+      if (Math.abs(x + side - start) > reach) side = -side; // at the edge of its band it turns back: the zigzag
+      if (y >= far.heights[x + side] + 3) x += side;
+      path.push([x, y++]);
+    }
+    side = rand() < 0.85 ? toward : -toward;
+  }
+  return path;
+}
+
+// Either side of the refuge, flowing towards it.
+const FALLS = [fallPath(201, 168, 1, 61), fallPath(286, 166, -1, 67, 8)];
 
 function valley() {
   const c = canvas();
@@ -214,7 +237,7 @@ function valley() {
   hall(x - 12, x + 12, base, 8);
   // A bridge over the young river.
   for (let i = -7; i <= 7; i++) c.set(x + i, base + 4 - Math.round(Math.sqrt(49 - i * i) * 0.35), 'mist');
-  for (const [fx, bottom] of FALLS) for (let y = fallTop(fx); y <= bottom; y++) if (dither(fx, y, 0.6)) c.set(fx, y, 'mist');
+  for (const path of FALLS) for (const [fx, fy] of path) c.set(fx, fy, 'mist');
   return c;
 }
 
@@ -222,22 +245,38 @@ function valley() {
 function falls(seed) {
   const c = canvas();
   const rand = random(seed);
-  for (const [fx, bottom] of FALLS) {
-    for (let y = fallTop(fx); y <= bottom; y++) if (rand() < 0.18) c.set(fx, y, 'accent');
-    for (let i = 0; i < 3; i++) c.set(fx + Math.round((rand() - 0.5) * 4), bottom + 1, 'mist');
+  for (const path of FALLS) {
+    for (const [fx, fy] of path) if (rand() < 0.2) c.set(fx, fy, 'accent');
+    const [ex, ey] = path.at(-1);
+    for (let i = 0; i < 3; i++) c.set(ex + Math.round((rand() - 0.5) * 4), ey + 1, 'mist');
   }
   return c;
 }
 
-// A drifting band of mist. It tiles, so CSS can scroll it sideways forever.
-function mist(top, bottom, colour, density, parts) {
+// Haze: tapered wisps, after the fog in shorts-factory's studio. HeroScene.astro blends them with
+// `mix-blend-mode: lighten`, so a wisp lifts every darker colour behind it to its own and leaves
+// anything brighter (snow, trunks, lanterns) cutting through. Edges thin out in a dither, so a wisp has
+// no outline; `core` is the colour of its middle, one step lighter for thick haze. Wisps wrap around
+// the edges, so the layer tiles and can drift forever.
+function haze(top, bottom, count, seed, core = 'mist') {
   const c = canvas();
-  const middle = (top + bottom) / 2;
-  for (let y = top; y <= bottom; y++) {
-    const fade = 1 - Math.abs(y - middle) / ((bottom - top) / 2);
-    for (let x = 0; x < W; x++) {
-      const thickness = Math.min(Math.max((wave(x, parts) + 1) / 2, 0), 1);
-      if (dither(x, y, thickness * fade * density)) c.set(x, y, colour);
+  const rand = random(seed);
+  for (let i = 0; i < count; i++) {
+    const width = 70 + Math.floor(rand() * 110);
+    const thickness = 3 + Math.floor(rand() * 3);
+    const y = top + Math.floor(rand() * (bottom - top));
+    const x = Math.floor(rand() * W);
+    const phase = rand() * 6;
+    for (let dx = -width / 2; dx < width / 2; dx++) {
+      // Thickness swells and thins along the wisp, so it billows instead of reading as a bar.
+      const local = thickness * (0.6 + 0.4 * Math.sin(dx / 7 + phase));
+      for (let dy = -thickness - 1; dy <= thickness + 1; dy++) {
+        const wx = (((x + Math.round(dx)) % W) + W) % W;
+        const edge = Math.hypot(dx / (width / 2), dy / (local + 1));
+        if (!dither(wx, y + dy, 1.4 - edge * 1.4)) continue;
+        const thick = dither(wx, y + dy, 1 - edge * 2); // the middle lifts two steps, fading out
+        if (thick || c.empty(wx, y + dy)) c.set(wx, y + dy, thick ? core : 'hairline');
+      }
     }
   }
   return c;
@@ -385,27 +424,32 @@ const LAYERS = {
   valley: valley(),
   'falls-a': falls(51),
   'falls-b': falls(53),
-  'mist-far': mist(146, 180, 'mist', 0.5, [[1, 2, 0], [0.6, 5, 1.3]]),
   'mountains-near': nearRange(),
+  'haze-far': haze(150, 186, 8, 61),
+  'haze-far-fast': haze(156, 184, 5, 63),
   hills: hills(),
   'river-a': riverShimmer(41),
   'river-b': riverShimmer(43),
   forest: forest(),
-  'mist-near': mist(206, 236, 'hairline', 0.6, [[1, 3, 2], [0.5, 7, 0.4]]),
+  'haze-near': haze(204, 238, 6, 67),
   foreground: foreground(),
 };
 
 mkdirSync('public/scene', { recursive: true });
 for (const [name, layer] of Object.entries(LAYERS)) writeFileSync(`public/scene/${name}.png`, encodePng(W, H, layer.pixels));
 
-// Flatten every layer (both twinkle frames shown) into a ×2 preview for the design folder.
+// Flatten every layer (both twinkle frames shown) into a ×2 preview for the design folder. Haze layers
+// blend as CSS `lighten` does: each channel keeps the brighter value.
 const SCALE = 2;
 const preview = new Uint8Array(W * SCALE * H * SCALE * 4);
-for (const layer of Object.values(LAYERS)) {
+for (const [name, layer] of Object.entries(LAYERS)) {
+  const lighten = name.startsWith('haze');
   for (let y = 0; y < H * SCALE; y++) {
     for (let x = 0; x < W * SCALE; x++) {
       const from = (Math.floor(y / SCALE) * W + Math.floor(x / SCALE)) * 4;
-      if (layer.pixels[from + 3]) preview.set(layer.pixels.subarray(from, from + 4), (y * W * SCALE + x) * 4);
+      const to = (y * W * SCALE + x) * 4;
+      if (!layer.pixels[from + 3]) continue;
+      for (let k = 0; k < 4; k++) preview[to + k] = lighten ? Math.max(preview[to + k], layer.pixels[from + k]) : layer.pixels[from + k];
     }
   }
 }

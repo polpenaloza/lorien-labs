@@ -11,13 +11,14 @@ const LAYERS = [
   { name: 'valley', depth: 0.4 },
   { name: 'falls-a', depth: 0.4, effect: 'twinkle' },
   { name: 'falls-b', depth: 0.4, effect: 'twinkle-late' },
-  { name: 'mist-far', depth: 0.36, effect: 'drift' },
   { name: 'mountains-near', depth: 0.3 },
+  { name: 'haze-far', depth: 0.3, effect: 'haze drift' },
+  { name: 'haze-far-fast', depth: 0.3, effect: 'haze drift-fast' },
   { name: 'hills', depth: 0.24 },
   { name: 'river-a', depth: 0.24, effect: 'twinkle' },
   { name: 'river-b', depth: 0.24, effect: 'twinkle-late' },
   { name: 'forest', depth: 0.14 },
-  { name: 'mist-near', depth: 0.08, effect: 'drift-back' },
+  { name: 'haze-near', depth: 0.08, effect: 'haze drift-back' },
   { name: 'foreground', depth: 0 },
 ];
 
@@ -104,14 +105,19 @@ const fireflies = Array.from({ length: 16 }, (_, i) => ({
     --loop: twinkle 4s steps(1) -2s infinite;
   }
 
-  /* Mist drifts one art pixel per step and loops, because scene.mjs draws it to tile. */
-  .drift,
-  .drift-back {
+  /* Haze lightens what is behind it instead of covering it, so the scene shows through. It drifts one
+     art pixel per step and loops, because scene.mjs draws it to tile; wisps move at different speeds. */
+  .haze {
     background-repeat: repeat-x;
+    mix-blend-mode: lighten;
   }
 
   .drift {
-    --loop: drift 120s steps(480) infinite;
+    --loop: drift 160s steps(480) infinite;
+  }
+
+  .drift-fast {
+    --loop: drift 90s steps(480) infinite;
   }
 
   .drift-back {
