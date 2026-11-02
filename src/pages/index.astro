@@ -10,7 +10,8 @@ const latestPosts = (await getPublishedPosts()).slice(0, 3);
 ---
 
 <Base title="Software, digital products and videos">
-  <div class="flex flex-wrap items-center justify-center gap-8 p-4 sm:p-8 bg-brand-navy text-brand-paper">
+  <!-- Navy in both themes, so the themed focus ring would be too dark on it in the light theme. -->
+  <div class="flex flex-wrap items-center justify-center gap-8 p-4 sm:p-8 bg-brand-navy text-brand-paper [--focus-ring:var(--brand-paper)]">
     <img class="mark" src="/logo.png" alt="Lorien Labs logo: a tree with its roots showing" width="196" height="196" />
     <div class="flex-[1_1_16rem]">
       <!-- One step down the type scale on phones, not fluid: 64px "Lorien Labs" overflows the narrow ones. -->
