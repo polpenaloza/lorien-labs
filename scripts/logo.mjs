@@ -1,7 +1,7 @@
 // The Lorien Labs mark as pixel art: one 49x49 grid, every file an integer upscale of it.
 // Run `pnpm logo` after changing the grid.
 import { writeFileSync } from 'node:fs';
-import { crc32, deflateSync } from 'node:zlib';
+import { encodePng } from './png.mjs';
 
 // Colours from design/tokens.json.
 const COLOURS = {
@@ -69,44 +69,21 @@ const GRID = LEFT_HALF.map((row) => {
 });
 
 // `size` adds navy around the upscaled grid, for sizes that are not a multiple of the grid.
-function render(scale, size = GRID.length * scale) {
+// `ground: false` leaves the navy transparent: CSS gives the mark its navy tile where it needs one.
+function render(scale, size = GRID.length * scale, { ground = true } = {}) {
   const offset = Math.floor((size - GRID.length * scale) / 2);
-  const rows = [];
+  const pixels = new Uint8Array(size * size * 4);
   for (let y = 0; y < size; y++) {
-    const row = [0]; // PNG filter type: none
     for (let x = 0; x < size; x++) {
       const gridRow = GRID[Math.floor((y - offset) / scale)];
       const pixel = gridRow?.[Math.floor((x - offset) / scale)] ?? '.';
-      row.push(...COLOURS[pixel]);
+      if (ground || pixel !== '.') pixels.set([...COLOURS[pixel], 255], (y * size + x) * 4);
     }
-    rows.push(Buffer.from(row));
   }
-  return encodePng(size, Buffer.concat(rows));
-}
-
-function chunk(type, data) {
-  const body = Buffer.concat([Buffer.from(type), data]);
-  const length = Buffer.alloc(4);
-  length.writeUInt32BE(data.length);
-  const checksum = Buffer.alloc(4);
-  checksum.writeUInt32BE(crc32(body));
-  return Buffer.concat([length, body, checksum]);
-}
-
-function encodePng(size, pixels) {
-  const header = Buffer.alloc(13);
-  header.writeUInt32BE(size, 0);
-  header.writeUInt32BE(size, 4);
-  header.set([8, 2], 8); // 8 bits per channel, RGB
-  return Buffer.concat([
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    chunk('IHDR', header),
-    chunk('IDAT', deflateSync(pixels, { level: 9 })),
-    chunk('IEND', Buffer.alloc(0)),
-  ]);
+  return encodePng(size, size, pixels);
 }
 
 writeFileSync('design/assets/lorien-labs-mark.png', render(16));
-writeFileSync('public/logo.png', render(4));
+writeFileSync('public/logo.png', render(4, undefined, { ground: false }));
 writeFileSync('public/favicon.png', render(1));
 writeFileSync('public/apple-touch-icon.png', render(3, 180));

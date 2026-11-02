@@ -43,6 +43,7 @@ const { title, description = business.description } = Astro.props;
         <a class="text-ink" href="/contact">Contact</a>
       </nav>
     </header>
+    <slot name="hero" />
     <main class="wrap"><slot /></main>
     <footer class="mt-12 border-0 border-t border-solid border-hairline">
       <div class="wrap grid grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] gap-6 py-12">

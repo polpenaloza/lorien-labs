@@ -14,7 +14,8 @@
     "check": "astro check",
     "test": "node --test scripts/youtube.test.mjs",
     "check:stripe": "node scripts/check-stripe.mjs",
-    "logo": "node scripts/logo.mjs"
+    "logo": "node scripts/logo.mjs",
+    "scene": "node scripts/scene.mjs"
   },
   "dependencies": {
     "astro": "7.4.4"

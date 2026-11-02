@@ -7,9 +7,16 @@ Lorien Labs is a tree with its roots showing: steady, grown rather than assemble
 ## Logo
 
 - The mark is pixel art: a 49×49 grid in `scripts/logo.mjs`. `pnpm logo` writes `assets/lorien-labs-mark.png` and the sized copies for the site (`public/logo.png`, `public/favicon.png`, `public/apple-touch-icon.png`). Show it only at multiples of 49px, with `image-rendering: pixelated`, so every pixel stays square.
-- It is an off-white tree with leaf-blue leaves and a leaf-blue root arc, on its own navy square. The navy is part of the file, so place it on `brand-navy` or `surface-100` (dark theme), where the square disappears into the page.
+- It is an off-white tree with leaf-blue leaves and a leaf-blue root arc. In `assets/`, the favicon and the touch icon it sits on its own navy square; `public/logo.png` is transparent, so it works on the hero's night sky and on `brand-navy` or `surface-100` (dark theme).
 - On a light page, set the mark inside a `brand-navy` tile with at least `space-4` of navy around the tree. Never place the PNG directly on paper.
 - Never recolour, outline, crop the roots or add a shadow to the mark. There is no wordmark file yet: when you need the name, set "Lorien Labs" in `display` (or `heading-1`) in `ink` beside the mark.
+
+## Hero scene
+
+- The home hero is a night forest drawn by `scripts/scene.mjs`: silver trees, snowy mountains, a river, an elven refuge in the valley, the moon. `pnpm scene` writes one transparent 480×270 layer per depth to `public/scene/` and a flat preview to `assets/hero-scene.png`.
+- It uses only the palette's dark values, so the scene is night in both themes. Pixel art has no blends: gradients and fades are ordered dithering, glows are a ring of pixels.
+- `src/components/HeroScene.astro` stacks the layers. Each has a `depth`: how far it sinks and pans while the page scrolls, and how far it leans from the pointer. Mist drifts, stars, river and waterfalls twinkle, leaves fall and fireflies blink. All of it stops for reduced motion.
+- It evokes an elven forest; it never copies a film, a game or a named place.
 
 ## Colour
 

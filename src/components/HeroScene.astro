@@ -1,0 +1,246 @@
+---
+// The home hero: pixel art layers drawn by scripts/scene.mjs (`pnpm scene`), stacked back to front.
+// `depth` sets how far a layer sinks while the page scrolls past the hero, how far it pans sideways
+// (the ground most, the sky least) and how far it leans away from the pointer. Those differences are
+// the parallax.
+const LAYERS = [
+  { name: 'sky', depth: 0.5 },
+  { name: 'stars-a', depth: 0.5, effect: 'twinkle' },
+  { name: 'stars-b', depth: 0.5, effect: 'twinkle-late' },
+  { name: 'mountains-far', depth: 0.44 },
+  { name: 'valley', depth: 0.4 },
+  { name: 'falls-a', depth: 0.4, effect: 'twinkle' },
+  { name: 'falls-b', depth: 0.4, effect: 'twinkle-late' },
+  { name: 'mist-far', depth: 0.36, effect: 'drift' },
+  { name: 'mountains-near', depth: 0.3 },
+  { name: 'hills', depth: 0.24 },
+  { name: 'river-a', depth: 0.24, effect: 'twinkle' },
+  { name: 'river-b', depth: 0.24, effect: 'twinkle-late' },
+  { name: 'forest', depth: 0.14 },
+  { name: 'mist-near', depth: 0.08, effect: 'drift-back' },
+  { name: 'foreground', depth: 0 },
+];
+
+// Positions are seeded, so every build draws the same leaves and fireflies.
+const seeded = (i: number, salt: number) => {
+  const n = Math.sin(i * 12.9898 + salt * 78.233) * 43758.5453;
+  return n - Math.floor(n);
+};
+const fallingLeaves = Array.from({ length: 14 }, (_, i) => ({
+  x: `${(4 + seeded(i, 1) * 92).toFixed(1)}%`,
+  duration: `${(11 + seeded(i, 2) * 9).toFixed(1)}s`,
+  delay: `${(-seeded(i, 3) * 20).toFixed(1)}s`,
+}));
+const fireflies = Array.from({ length: 16 }, (_, i) => ({
+  x: `${(8 + seeded(i, 4) * 84).toFixed(1)}%`,
+  y: (0.58 + seeded(i, 5) * 0.28).toFixed(3), // a share of the art's height, from its top
+  duration: `${(3 + seeded(i, 6) * 4).toFixed(1)}s`,
+  delay: `${(-seeded(i, 7) * 7).toFixed(1)}s`,
+}));
+---
+
+<section class="scene" data-scene>
+  <div class="layers" aria-hidden="true">
+    {
+      LAYERS.map(({ name, depth, effect }) => (
+        <div class:list={['layer', effect]} style={`--depth: ${depth}; background-image: url(/scene/${name}.png)`} />
+      ))
+    }
+    {fallingLeaves.map(({ x, duration, delay }) => <span class="leaf" style={`left: ${x}; --duration: ${duration}; --delay: ${delay}`} />)}
+    {
+      fireflies.map(({ x, y, duration, delay }) => (
+        <span class="firefly" style={`left: ${x}; --y: ${y}; --duration: ${duration}; --delay: ${delay}`} />
+      ))
+    }
+  </div>
+  <div class="content">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .scene {
+    /* The art is 480×270. It is at least as wide as the screen plus room to lean and pan, and at
+       most 80svh tall, so on phones it stays short and the text above it stays off the mountains. */
+    --art: max(56.25vw + 24px, min(80svh, 150vw));
+    --px: calc(var(--art) / 270);
+    /* How far the art overhangs each side of the screen: the most a layer can pan without a gap. */
+    --slack: calc((var(--art) * 16 / 9 - 100vw) / 2);
+    position: relative;
+    box-sizing: border-box; /* min-height counts the padding below, so the art is never taller than the scene */
+    min-height: var(--art);
+    /* The text sits in the flow above the art's mountains, which start about a quarter of the way down. */
+    padding-bottom: calc(var(--art) * 0.78);
+    overflow: hidden;
+    /* Night in both themes: inside the scene every token resolves to its dark value. */
+    color-scheme: dark;
+    background: var(--surface-000);
+    color: var(--ink);
+  }
+
+  .layers > * {
+    position: absolute;
+  }
+
+  .layer {
+    left: 50%;
+    bottom: 0;
+    width: calc(var(--art) * 16 / 9);
+    height: var(--art);
+    margin-left: calc(var(--art) * -8 / 9);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    translate: calc(var(--mx, 0) * var(--depth) * -24px) 0;
+    transition: translate 0.6s ease-out;
+    animation: var(--loop, none);
+  }
+
+  .twinkle {
+    --loop: twinkle 4s steps(1) infinite;
+  }
+
+  .twinkle-late {
+    --loop: twinkle 4s steps(1) -2s infinite;
+  }
+
+  /* Mist drifts one art pixel per step and loops, because scene.mjs draws it to tile. */
+  .drift,
+  .drift-back {
+    background-repeat: repeat-x;
+  }
+
+  .drift {
+    --loop: drift 120s steps(480) infinite;
+  }
+
+  .drift-back {
+    --loop: drift 200s steps(480) infinite reverse;
+  }
+
+  .leaf {
+    top: calc(-4 * var(--px));
+    --fall: calc(var(--art) * 1.6);
+    width: calc(2 * var(--px));
+    height: calc(2 * var(--px));
+    background: var(--brand-leaf);
+    box-shadow: var(--px) 0 0 var(--accent);
+    animation: fall var(--duration) steps(90) var(--delay) infinite;
+  }
+
+  .firefly {
+    top: calc(100% - var(--art) * (1 - var(--y)));
+    width: var(--px);
+    height: var(--px);
+    background: var(--brand-paper);
+    box-shadow: 0 0 0 var(--px) var(--accent);
+    opacity: 0;
+    animation: blink var(--duration) steps(1) var(--delay) infinite;
+  }
+
+  .content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    max-width: 40rem;
+    margin-inline: auto;
+    padding: var(--space-12) var(--space-4) 0;
+    text-align: center;
+  }
+
+  .content :global(p) {
+    margin: 0;
+  }
+
+  @keyframes twinkle {
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  @keyframes drift {
+    to {
+      background-position-x: calc(var(--art) * -16 / 9);
+    }
+  }
+
+  @keyframes fall {
+    25% {
+      transform: translate(calc(6 * var(--px)), calc(var(--fall) * 0.25));
+    }
+    50% {
+      transform: translate(calc(-2 * var(--px)), calc(var(--fall) * 0.5));
+    }
+    75% {
+      transform: translate(calc(5 * var(--px)), calc(var(--fall) * 0.75));
+    }
+    to {
+      transform: translate(0, var(--fall));
+    }
+  }
+
+  @keyframes blink {
+    20%,
+    60% {
+      opacity: 1;
+    }
+    70% {
+      opacity: 0;
+    }
+  }
+
+  /* Scrolling past the hero sinks each layer and pans it right to left, showing the art's right side. */
+  @keyframes sink {
+    to {
+      transform: translate(calc(var(--slack) * (var(--depth) - 1)), calc(var(--depth) * 50%));
+    }
+  }
+
+  @keyframes rise {
+    to {
+      transform: translateY(-30%);
+      opacity: 0;
+    }
+  }
+
+  /* The scroll parallax is native CSS. Browsers without scroll-driven animations show a still scene. */
+  @supports (animation-timeline: scroll()) {
+    .layer {
+      animation: var(--loop, none), sink linear both;
+      animation-timeline: auto, scroll(root);
+      animation-range: normal, 0 100svh;
+    }
+
+    .content {
+      animation: rise linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 80svh;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .layer,
+    .content {
+      animation: none;
+      translate: none;
+    }
+
+    .leaf,
+    .firefly {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Layers lean away from the pointer, deeper ones more. Skipped on touch screens and for reduced motion.
+  const scene = document.querySelector<HTMLElement>('[data-scene]');
+  if (scene && matchMedia('(pointer: fine) and (prefers-reduced-motion: no-preference)').matches) {
+    scene.addEventListener('pointermove', (event) => {
+      scene.style.setProperty('--mx', ((event.clientX / innerWidth) * 2 - 1).toFixed(3));
+    });
+    scene.addEventListener('pointerleave', () => scene.style.setProperty('--mx', '0'));
+  }
+</script>

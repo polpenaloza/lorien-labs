@@ -20,6 +20,7 @@ pnpm dev
 | `pnpm test` | Tests the YouTube link parser |
 | `pnpm check:stripe` | Audits `dist/` against Stripe's website requirements |
 | `pnpm logo` | Regenerates the logo files from the pixel grid in `scripts/logo.mjs` |
+| `pnpm scene` | Redraws the home hero's pixel art layers into `public/scene/` (`scripts/scene.mjs`) |
 
 ## Cloudflare
 
