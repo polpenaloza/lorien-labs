@@ -17,6 +17,7 @@ pnpm dev
 | `pnpm check` | Type-checks the project and the content |
 | `pnpm test` | Tests the YouTube link parser |
 | `pnpm check:stripe` | Audits `dist/` against Stripe's website requirements |
+| `pnpm logo` | Regenerates the logo files from the pixel grid in `scripts/logo.mjs` |
 
 ## Cloudflare
 

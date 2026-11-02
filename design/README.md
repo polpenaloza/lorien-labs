@@ -6,7 +6,8 @@ Lorien Labs is a tree with its roots showing: steady, grown rather than assemble
 
 ## Logo
 
-- The mark is `assets/lorien-labs-mark.png` (sized copies for the site: `public/logo.png`, `public/favicon.png`, `public/apple-touch-icon.png`): an off-white tree with leaf-blue leaves and a leaf-blue root arc, on its own navy square. The navy is part of the file, so place it on `brand-navy` or `surface-100` (dark theme), where the square disappears into the page.
+- The mark is pixel art: a 49×49 grid in `scripts/logo.mjs`. `pnpm logo` writes `assets/lorien-labs-mark.png` and the sized copies for the site (`public/logo.png`, `public/favicon.png`, `public/apple-touch-icon.png`). Show it only at multiples of 49px, with `image-rendering: pixelated`, so every pixel stays square.
+- It is an off-white tree with leaf-blue leaves and a leaf-blue root arc, on its own navy square. The navy is part of the file, so place it on `brand-navy` or `surface-100` (dark theme), where the square disappears into the page.
 - On a light page, set the mark inside a `brand-navy` tile with at least `space-4` of navy around the tree. Never place the PNG directly on paper.
 - Never recolour, outline, crop the roots or add a shadow to the mark. There is no wordmark file yet: when you need the name, set "Lorien Labs" in `display` (or `heading-1`) in `ink` beside the mark.
 

@@ -37,17 +37,7 @@
   --radius-sm: 2px;
   --radius-md: 4px;
 
-  /* Names the pages already use */
-  --font-body: var(--font-display);
-  --color-ink: var(--ink);
-  --color-paper: var(--surface-100);
-  --color-muted: var(--ink-muted);
-  --color-line: var(--hairline);
-  --color-link: var(--accent);
-
-  --content-width: 46rem;
-  --space-gutter: var(--space-4);
-  --space-section: var(--space-12);
+  --content-width: 52rem;
 }
 
 @media (prefers-color-scheme: light) {

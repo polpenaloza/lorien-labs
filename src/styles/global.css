@@ -1,15 +1,16 @@
 body {
   margin: 0;
-  background: var(--color-paper);
-  color: var(--color-ink);
-  font-family: var(--font-body);
+  background: var(--surface-100);
+  color: var(--ink);
+  font-family: var(--font-display);
   font-size: 16px;
   line-height: 24px;
 }
 
 h1,
 h2,
-h3 {
+h3,
+strong {
   font-weight: 600;
 }
 
@@ -23,62 +24,166 @@ h2 {
   line-height: 32px;
 }
 
+h3 {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.display {
+  font-size: 64px;
+  line-height: 64px;
+  font-weight: 700;
+}
+
 :focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
 a {
-  color: var(--color-link);
+  color: var(--accent);
 }
 
 .wrap {
   max-width: var(--content-width);
   margin-inline: auto;
-  padding-inline: var(--space-gutter);
+  padding-inline: var(--space-8);
 }
 
 .site-header,
-.site-header nav,
-.site-footer nav {
+.site-header nav {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-gutter);
+  align-items: center;
+  gap: var(--space-4);
 }
 
 .site-header {
   justify-content: space-between;
-  padding-block: var(--space-gutter);
+  padding-block: var(--space-4);
+}
+
+.site-header nav a {
+  color: var(--ink);
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  color: var(--color-ink);
+  color: var(--ink);
   font-weight: 700;
   text-decoration: none;
 }
 
-.brand img {
-  border-radius: var(--radius-0);
+/* The mark is pixel art: keep its pixels hard at every size. */
+.mark {
+  background: var(--brand-navy);
+  image-rendering: pixelated;
+}
+
+/* On paper the mark needs its navy tile. On the dark page the tile disappears, so it needs no padding. */
+@media (prefers-color-scheme: light) {
+  .brand .mark {
+    padding: var(--space-4);
+  }
+}
+
+section {
+  margin-top: var(--space-12);
+}
+
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-8);
+  background: var(--brand-navy);
+  color: var(--brand-paper);
+}
+
+.hero h1,
+.hero p {
+  margin: 0 0 var(--space-4);
+}
+
+.hero-text {
+  flex: 1 1 16rem;
+}
+
+.button {
+  display: inline-block;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* The hero is navy in both themes, so its button can't take the themed accent. */
+.hero .button {
+  background: var(--brand-paper);
+  color: var(--brand-navy);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--space-6);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--hairline);
+  background: var(--surface-200);
+}
+
+.card > * {
+  margin: 0;
+}
+
+.panel {
+  padding: var(--space-8);
+  border: 1px solid var(--hairline);
+  background: var(--surface-200);
 }
 
 .site-footer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-gutter);
-  margin-top: var(--space-section);
-  padding-block: var(--space-section);
-  border-top: 1px solid var(--color-line);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: var(--space-6);
+  margin-top: var(--space-12);
+  padding-block: var(--space-12);
+  border-top: 1px solid var(--hairline);
 }
 
 .site-footer p {
   margin: 0;
 }
 
+.site-footer nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.site-footer .footer-note {
+  grid-column: 1 / -1;
+}
+
 .meta {
-  color: var(--color-muted);
+  color: var(--ink-muted);
   font-size: 14px;
   line-height: 20px;
 }
@@ -91,8 +196,16 @@ a {
   text-transform: uppercase;
 }
 
+.tag {
+  padding-inline: var(--space-1);
+  border-radius: var(--radius-sm);
+  background: var(--surface-000);
+  color: var(--ink-muted);
+}
+
 .video {
   aspect-ratio: 16 / 9;
+  margin-block: var(--space-6);
 }
 
 .video iframe {
@@ -101,10 +214,31 @@ a {
   border: 0;
 }
 
-dt {
-  font-weight: 700;
+dl {
+  margin: 0;
 }
 
 dd {
-  margin: 0 0 var(--space-gutter);
+  margin: 0 0 var(--space-4);
+}
+
+dd:last-child {
+  margin-bottom: 0;
+}
+
+/* One step down the type scale, not fluid: 64px "Lorien Labs" overflows a phone. */
+@media (max-width: 30rem) {
+  .display {
+    font-size: 40px;
+    line-height: 44px;
+  }
+
+  .wrap {
+    padding-inline: var(--space-4);
+  }
+
+  .hero,
+  .panel {
+    padding: var(--space-4);
+  }
 }

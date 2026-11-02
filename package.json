@@ -13,7 +13,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "test": "node --test scripts/youtube.test.mjs",
-    "check:stripe": "node scripts/check-stripe.mjs"
+    "check:stripe": "node scripts/check-stripe.mjs",
+    "logo": "node scripts/logo.mjs"
   },
   "dependencies": {
     "astro": "7.4.4"

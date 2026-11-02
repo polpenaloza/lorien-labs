@@ -35,7 +35,7 @@ const channel = await getEntry(post.data.channel);
         post.data.sources.map((source) => (
           <li>
             {source.url ? <a href={source.url}>{source.title}</a> : source.title}
-            <span class="meta"> ({source.type})</span>
+            <span class="label tag">{source.type}</span>
           </li>
         ))
       }
