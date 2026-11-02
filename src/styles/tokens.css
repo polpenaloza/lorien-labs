@@ -20,8 +20,9 @@
   --border-strong: light-dark(#42728d, #5f8eaa);
   --focus-ring: light-dark(#36617a, #8fb8d1);
 
-  /* Type: Pixelify Sans for everything, Silkscreen for capital labels (loaded in Base.astro) */
-  --font-display: 'Pixelify Sans', ui-monospace, monospace;
+  /* Type: VT323 for titles, Silkscreen for capital labels (loaded in Base.astro), the system face for reading */
+  --font-display: 'VT323', ui-monospace, monospace;
+  --font-body: system-ui, sans-serif;
   --font-label: 'Silkscreen', ui-monospace, monospace;
 
   /* Spacing: 4px grid */

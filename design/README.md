@@ -22,8 +22,9 @@ Lorien Labs is a tree with its roots showing: steady, grown rather than assemble
 
 ## Type
 
-- Two pixel faces from Google Fonts. **Pixelify Sans** (400–700) carries everything from `display` to `small`. **Silkscreen** sets `label` only, in capitals: eyebrows, tags and table headers.
-- Load both from Google Fonts: `https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Silkscreen&display=swap`.
+- Pixel faces are for short, large text; reading text gets a plain one. **VT323** sets `display`, `heading-1` and `heading-2`: titles, banners and the name beside the mark. It is drawn on a 16px grid and has one weight, so keep it at multiples of 16px and never bold: anything else blurs its pixels. **Silkscreen** sets `label` only, in capitals: eyebrows, tags and table headers. The **body** face (`system-ui`) sets `body`, `body-strong` and `small`: paragraphs, card titles, buttons, navigation and the footer.
+- Never set a sentence in a pixel face.
+- Load both pixel faces from Google Fonts: `https://fonts.googleapis.com/css2?family=VT323&family=Silkscreen&display=swap`. The body face needs no download.
 - Use one `display` per page, `heading-1` for page titles, `heading-2` for sections and `body` for running text. Don't set long copy below 16px. Keep `small` for captions in `ink-muted`.
 - Keep sizes on the scale. Pixel faces render sharpest at their set sizes, so don't scale type fluidly.
 

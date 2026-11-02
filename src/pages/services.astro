@@ -12,7 +12,7 @@ const offers = (await getCollection('offers')).sort((a, b) => a.data.order - b.d
     {
       offers.map(({ data }) => (
         <article class="card">
-          <p class="label meta">{data.category}</p>
+          <p class="label text-ink-muted">{data.category}</p>
           <h2>{data.name}</h2>
           <p>{data.description}</p>
           <p>
@@ -24,7 +24,7 @@ const offers = (await getCollection('offers')).sort((a, b) => a.data.order - b.d
       ))
     }
   </div>
-  <section>
+  <section class="mt-12">
     <p>
       Before you buy, please read our <a href="/terms">Terms and Conditions</a> and our
       <a href="/refunds">Refund, Cancellation and Delivery Policy</a>. Questions? <a href="/contact">Contact us</a>.
