@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import HeroScene from '../components/HeroScene.astro';
 import Base from '../layouts/Base.astro';
 import { formatDate, getBusiness, getPublishedPosts } from '../lib/site';
 
@@ -10,19 +11,16 @@ const latestPosts = (await getPublishedPosts()).slice(0, 3);
 ---
 
 <Base title="Software, digital products and videos">
-  <!-- Navy in both themes, so the themed focus ring would be too dark on it in the light theme. -->
-  <div class="flex flex-wrap items-center justify-center gap-8 p-4 sm:p-8 bg-brand-navy text-brand-paper [--focus-ring:var(--brand-paper)]">
-    <img class="mark" src="/logo.png" alt="Lorien Labs logo: a tree with its roots showing" width="196" height="196" />
-    <div class="flex-[1_1_16rem]">
-      <!-- One step down the type scale on phones, not fluid: 64px "Lorien Labs" overflows the narrow ones. -->
-      <h1 class="m-0 mb-4 text-heading-1 sm:text-display">Lorien Labs</h1>
-      <p class="m-0 mb-4">{business.description}</p>
-      <!-- The hero is navy in both themes, so its button can't take the themed accent. -->
-      <a class="button bg-brand-paper text-brand-navy" href="/services">See services and prices</a>
-    </div>
-  </div>
+  <HeroScene slot="hero">
+    <img class="[image-rendering:pixelated]" src="/logo.png" alt="Lorien Labs logo: a tree with its roots showing" width="98" height="98" />
+    <!-- One step down the type scale on phones, not fluid: 64px "Lorien Labs" overflows the narrow ones. -->
+    <h1 class="m-0 text-heading-1 sm:text-display">Lorien Labs</h1>
+    <p>{business.description}</p>
+    <!-- The hero is navy in both themes, so its button can't take the themed accent. -->
+    <a class="button bg-brand-paper text-brand-navy" href="/services">See services and prices</a>
+  </HeroScene>
 
-  <section class="mt-12">
+  <section class="mt-12 reveal">
     <h2>What we sell</h2>
     <div class="cards">
       {
@@ -37,7 +35,7 @@ const latestPosts = (await getPublishedPosts()).slice(0, 3);
     </div>
   </section>
 
-  <section class="mt-12">
+  <section class="mt-12 reveal">
     <h2>Our channels</h2>
     <div class="cards">
       {
@@ -51,7 +49,7 @@ const latestPosts = (await getPublishedPosts()).slice(0, 3);
     </div>
   </section>
 
-  <section class="mt-12">
+  <section class="mt-12 reveal">
     <h2>Latest from the blog</h2>
     {
       latestPosts.length > 0 ? (
