@@ -16,7 +16,7 @@ Lorien Labs is a tree with its roots showing: steady, grown rather than assemble
 - The home hero is a night forest drawn by `scripts/scene.mjs`: silver trees, snowy mountains, a river, an elven refuge in the valley, the moon. `pnpm scene` writes one transparent 480×270 layer per depth to `public/scene/` and a flat preview to `assets/hero-scene.png`.
 - It uses only the palette's dark values, so the scene is night in both themes. Pixel art has no blends: gradients and fades are ordered dithering, glows are a ring of pixels.
 - `src/components/HeroScene.astro` stacks the layers. Each has a `depth`: how far it sinks and pans while the page scrolls, and how far it leans from the pointer. Haze drifts, stars, river and waterfalls twinkle, leaves fall and fireflies blink. All of it stops for reduced motion.
-- Haze is translucent the pixel art way, after shorts-factory's studio: wisps blended with `mix-blend-mode: lighten` lift every darker colour behind them a step and let brighter ones (snow, trunks, lanterns) cut through, so the result stays on the palette.
+- Haze is translucent the pixel art way, after lorien-studio's renderer: wisps blended with `mix-blend-mode: lighten` lift every darker colour behind them a step and let brighter ones (snow, trunks, lanterns) cut through, so the result stays on the palette.
 - It evokes an elven forest; it never copies a film, a game or a named place.
 
 ## Colour
