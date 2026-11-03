@@ -253,7 +253,7 @@ function falls(seed) {
   return c;
 }
 
-// Haze: tapered wisps, after the fog in shorts-factory's studio. HeroScene.astro blends them with
+// Haze: tapered wisps, after the fog in lorien-studio's renderer. HeroScene.astro blends them with
 // `mix-blend-mode: lighten`, so a wisp lifts every darker colour behind it to its own and leaves
 // anything brighter (snow, trunks, lanterns) cutting through. Edges thin out in a dither, so a wisp has
 // no outline; `core` is the colour of its middle, one step lighter for thick haze. Wisps wrap around
