@@ -86,12 +86,27 @@ function render(scale, size = GRID.length * scale, { ground = true, colours = CO
   return encodePng(size, size, pixels);
 }
 
+// The favicon as SVG: one path per colour, a rectangle per run of pixels. Google only shows favicons
+// that are SVG or multiples of 48px, which a 49px grid can't be. Light tabs get the navy twin.
+function favicon() {
+  const hex = (rgb) => `#${rgb.map((v) => v.toString(16).padStart(2, '0')).join('')}`;
+  const paths = { P: '', L: '' };
+  GRID.forEach((row, y) => {
+    for (let x = 0; x < row.length;) {
+      let end = x;
+      while (row[end] === row[x]) end++;
+      if (row[x] !== '.') paths[row[x]] += `M${x} ${y}h${end - x}v1h-${end - x}z`;
+      x = end;
+    }
+  });
+  const style = `.P{fill:${hex(COLOURS.P)}}.L{fill:${hex(COLOURS.L)}}@media (prefers-color-scheme:light){.P{fill:${hex(ON_LIGHT.P)}}}`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 49 49" shape-rendering="crispEdges"><style>${style}</style><path class="P" d="${paths.P}"/><path class="L" d="${paths.L}"/></svg>\n`;
+}
+
 // Every mark is transparent. Only the touch icon keeps its navy: iOS fills transparency with black.
 const clear = { ground: false };
-const clearOnLight = { ground: false, colours: ON_LIGHT };
 writeFileSync('design/assets/lorien-labs-mark.png', render(16, undefined, clear));
 writeFileSync('public/logo.png', render(4, undefined, clear));
-writeFileSync('public/logo-light.png', render(4, undefined, clearOnLight));
-writeFileSync('public/favicon.png', render(1, undefined, clear));
-writeFileSync('public/favicon-light.png', render(1, undefined, clearOnLight));
+writeFileSync('public/logo-light.png', render(4, undefined, { ground: false, colours: ON_LIGHT }));
+writeFileSync('public/favicon.svg', favicon());
 writeFileSync('public/apple-touch-icon.png', render(3, 180));

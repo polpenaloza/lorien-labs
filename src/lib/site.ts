@@ -13,3 +13,7 @@ export async function getPublishedPosts() {
 
 // Content dates are UTC midnight: format them in UTC or they show a day early in the Americas.
 export const formatDate = (date: Date) => date.toLocaleDateString('en-US', { dateStyle: 'long', timeZone: 'UTC' });
+
+// The page's public path. With `build.format: 'file'` the build sees `/services.html` and `/index.html`,
+// while links, the sitemap and dev use `/services` and `/`.
+export const pagePath = (url: URL) => url.pathname.replace(/(index)?\.html$/, '');

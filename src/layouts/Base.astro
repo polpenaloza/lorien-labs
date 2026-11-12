@@ -1,17 +1,32 @@
 ---
+import { Font } from 'astro:assets';
 import { getCollection } from 'astro:content';
-import { getBusiness } from '../lib/site';
+import { getBusiness, pagePath } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/global.css';
 
 interface Props {
   title: string;
   description?: string;
+  /** Open Graph type: `article` for blog posts. */
+  type?: 'website' | 'article';
+  /** Keeps the page out of search results, and gives it no canonical URL. */
+  noindex?: boolean;
 }
 
 const business = await getBusiness();
 const channels = await getCollection('channels');
-const { title, description = business.description } = Astro.props;
+const { title, description = business.description, type = 'website', noindex = false } = Astro.props;
+const path = pagePath(Astro.url);
+const canonical = new URL(path, Astro.site);
+const NAV = [
+  { href: '/services', label: 'Services' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+];
+// A section stays current on its sub-pages: /blog for every post.
+const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`);
 ---
 
 <!doctype html>
@@ -21,14 +36,36 @@ const { title, description = business.description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <title>{title} | {business.legal_name}</title>
-    <link rel="icon" type="image/png" href="/favicon.png" media="(prefers-color-scheme: dark)" />
-    <link rel="icon" type="image/png" href="/favicon-light.png" media="(prefers-color-scheme: light)" />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <!-- SVG: Google only shows favicons that are SVG or multiples of 48px, and the mark is a 49px grid. -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&family=Silkscreen&display=swap" />
+    <!-- Meta tags can't read CSS variables: these are brand-navy and brand-paper (design/tokens.json). -->
+    <meta name="theme-color" content="#1d2d3f" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#e9e8e2" media="(prefers-color-scheme: light)" />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={business.legal_name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/og.png', Astro.site)} />
+    <meta property="og:image:width" content="1440" />
+    <meta property="og:image:height" content="810" />
+    <meta property="og:image:alt" content="A pixel art night forest under snowy mountains and the moon" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <!-- VT323 sets every page title, so it is preloaded; Silkscreen only sets small labels. -->
+    <Font cssVariable="--font-vt323" preload />
+    <Font cssVariable="--font-silkscreen" />
+    <slot name="head" />
   </head>
   <body>
+    <a
+      href="#main"
+      class="sr-only z-20 bg-surface-200 focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:p-4"
+    >
+      Skip to content
+    </a>
     <header class="site-header sticky top-0 z-10 bg-surface-100">
       <div class="wrap flex flex-wrap items-center justify-between gap-4 py-2 sm:py-4">
         <a href="/" class="inline-flex items-center gap-2 text-heading-2 text-ink font-display no-underline">
@@ -41,23 +78,20 @@ const { title, description = business.description } = Astro.props;
           <span class="sr-only sm:not-sr-only">Lorien Labs</span>
         </a>
         <nav aria-label="Main" class="flex flex-wrap items-center gap-4">
-          <a class="text-ink" href="/services">
-            Services
-          </a>
-          <a class="text-ink" href="/blog">
-            Blog
-          </a>
-          <a class="text-ink" href="/about">
-            About
-          </a>
-          <a class="text-ink" href="/contact">
-            Contact
-          </a>
+          {NAV.map(({ href, label }) => (
+            <a
+              class="text-ink aria-[current=page]:text-accent"
+              href={href}
+              aria-current={isCurrent(href) ? 'page' : undefined}
+            >
+              {label}
+            </a>
+          ))}
         </nav>
       </div>
     </header>
     <!-- flex-1 takes the leftover height, so the footer sits at the bottom of short pages. -->
-    <main class="flex-1">
+    <main id="main" class="flex-1">
       <slot name="hero" />
       <div class="wrap">
         <slot />
