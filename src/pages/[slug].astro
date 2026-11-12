@@ -19,8 +19,7 @@ const business = await getBusiness();
     {page.data.updated ? <p class="meta">Last updated: {formatDate(page.data.updated)}</p> : null}
     <Content />
     <p>
-      Contact: {business.legal_name}, {business.address},
-      <a href={`mailto:${business.email}`}>{business.email}</a>.
+      Contact: {business.legal_name}, {business.address},<a href={`mailto:${business.email}`}>{business.email}</a>.
     </p>
   </article>
 </Base>

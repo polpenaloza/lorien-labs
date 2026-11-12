@@ -1,5 +1,4 @@
-const VIDEO_ID =
-  /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([\w-]{11})(?:[?&#/]|$)/;
+const VIDEO_ID = /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([\w-]{11})(?:[?&#/]|$)/;
 
 export function youtubeId(url: string): string {
   const id = url.match(VIDEO_ID)?.[1];

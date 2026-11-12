@@ -8,14 +8,20 @@ const business = await getBusiness();
 <Base title="Contact" description={`How to reach ${business.legal_name}.`}>
   <h1>Contact</h1>
   <p>For questions about an order, a refund or our services, write or call us.</p>
-  <dl class="panel m-0">
+  <dl class="m-0 panel">
     <dt class="label text-ink-muted">Company</dt>
-    <dd class="m-0 mb-4">{business.legal_name}, {business.entity}</dd>
+    <dd class="m-0 mb-4">
+      {business.legal_name}, {business.entity}
+    </dd>
     <dt class="label text-ink-muted">Address</dt>
     <dd class="m-0 mb-4">{business.address}</dd>
     <dt class="label text-ink-muted">Email</dt>
-    <dd class="m-0 mb-4"><a href={`mailto:${business.email}`}>{business.email}</a></dd>
+    <dd class="m-0 mb-4">
+      <a href={`mailto:${business.email}`}>{business.email}</a>
+    </dd>
     <dt class="label text-ink-muted">Phone</dt>
-    <dd class="m-0"><a href={`tel:${business.phone}`}>{business.phone}</a></dd>
+    <dd class="m-0">
+      <a href={`tel:${business.phone}`}>{business.phone}</a>
+    </dd>
   </dl>
 </Base>

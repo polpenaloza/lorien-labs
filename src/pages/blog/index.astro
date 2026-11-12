@@ -8,19 +8,19 @@ const posts = await getPublishedPosts();
 <Base title="Blog" description="The story, the analysis and the sources behind every video we publish.">
   <h1>Blog</h1>
   <p>The story, the analysis and the sources behind every video we publish.</p>
-  {
-    posts.length > 0 ? (
-      <div class="stack">
-        {posts.map((post) => (
-          <article class="card">
-            <p class="meta">{formatDate(post.data.date)}</p>
-            <h2><a href={`/blog/${post.id}`}>{post.data.title}</a></h2>
-            <p>{post.data.summary}</p>
-          </article>
-        ))}
-      </div>
-    ) : (
-      <p>The first posts are on their way.</p>
-    )
-  }
+  {posts.length > 0 ? (
+    <div class="stack">
+      {posts.map((post) => (
+        <article class="card">
+          <p class="meta">{formatDate(post.data.date)}</p>
+          <h2>
+            <a href={`/blog/${post.id}`}>{post.data.title}</a>
+          </h2>
+          <p>{post.data.summary}</p>
+        </article>
+      ))}
+    </div>
+  ) : (
+    <p>The first posts are on their way.</p>
+  )}
 </Base>
