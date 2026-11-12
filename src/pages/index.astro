@@ -20,7 +20,7 @@ const latestPosts = (await getPublishedPosts()).slice(0, 3);
     <a class="button bg-brand-paper text-brand-navy" href="/services">See services and prices</a>
   </HeroScene>
 
-  <section class="mt-12 reveal">
+  <section class="mt-12">
     <h2>What we sell</h2>
     <div class="cards">
       {
@@ -35,7 +35,7 @@ const latestPosts = (await getPublishedPosts()).slice(0, 3);
     </div>
   </section>
 
-  <section class="mt-12 reveal">
+  <section class="mt-12">
     <h2>Our channels</h2>
     <div class="cards">
       {
@@ -49,7 +49,7 @@ const latestPosts = (await getPublishedPosts()).slice(0, 3);
     </div>
   </section>
 
-  <section class="mt-12 reveal">
+  <section class="mt-12">
     <h2>Latest from the blog</h2>
     {
       latestPosts.length > 0 ? (

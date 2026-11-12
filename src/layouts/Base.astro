@@ -32,13 +32,16 @@ const { title, description = business.description } = Astro.props;
     />
   </head>
   <body>
-    <header class="wrap flex flex-wrap items-center justify-between gap-4 py-4">
+    <header class="site-header sticky top-0 z-10 bg-surface-100">
+      <div class="wrap flex flex-wrap items-center justify-between gap-4 py-2 sm:py-4">
       <a href="/" class="inline-flex items-center gap-2 text-ink font-display text-heading-2 no-underline">
         <!-- Transparent mark: the paper tree on dark pages, its navy twin on light ones. -->
         <picture>
           <source srcset="/logo-light.png" media="(prefers-color-scheme: light)" />
           <img class="mark block" src="/logo.png" alt="" width="49" height="49" />
-        </picture>Lorien Labs
+        </picture>
+        <!-- The header stays on screen, so on phones it keeps to one row: the tree alone, the name for screen readers. -->
+        <span class="sr-only sm:not-sr-only">Lorien Labs</span>
       </a>
       <nav aria-label="Main" class="flex flex-wrap items-center gap-4">
         <a class="text-ink" href="/services">Services</a>
@@ -46,9 +49,13 @@ const { title, description = business.description } = Astro.props;
         <a class="text-ink" href="/about">About</a>
         <a class="text-ink" href="/contact">Contact</a>
       </nav>
+      </div>
     </header>
-    <slot name="hero" />
-    <main class="wrap"><slot /></main>
+    <!-- flex-1 takes the leftover height, so the footer sits at the bottom of short pages. -->
+    <main class="flex-1">
+      <slot name="hero" />
+      <div class="wrap"><slot /></div>
+    </main>
     <footer class="mt-12 border-0 border-t border-solid border-hairline">
       <div class="wrap grid grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] gap-6 py-12">
       <div>
@@ -82,5 +89,32 @@ const { title, description = business.description } = Astro.props;
       <p class="meta col-span-full m-0">Card payments are processed securely by Stripe. We never see or store your card number.</p>
       </div>
     </footer>
+    <!-- Inline, so blocks are tagged before the first paint and nothing flashes. -->
+    <script is:inline>
+      // Blocks fade up the first time they scroll into view; ones that enter together stagger.
+      // ponytail: tagged by selector, not by class, so CMS Markdown (which can't carry classes) reveals too.
+      if (matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries
+              .filter((entry) => entry.isIntersecting)
+              .forEach(({ target }, i) => {
+                target.style.setProperty('--delay', `${Math.min(i, 6) * 70}ms`);
+                target.dataset.reveal = 'shown';
+                io.unobserve(target);
+              });
+          },
+          { threshold: 0.1 },
+        );
+        document
+          .querySelectorAll(
+            'main :is(h1, h2, h3, p, ul, ol, dl, pre, blockquote, .card, .panel, .aspect-video):not([data-scene] *, .card *, .panel *, li *), footer .wrap > *',
+          )
+          .forEach((el) => {
+            el.dataset.reveal = '';
+            io.observe(el);
+          });
+      }
+    </script>
   </body>
 </html>
