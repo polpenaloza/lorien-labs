@@ -1,0 +1,4 @@
+# The CMS writes these on main in its own format; formatting them would fail CI on every edit.
+src/content/
+public/admin/
+pnpm-lock.yaml

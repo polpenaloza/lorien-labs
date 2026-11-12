@@ -9,26 +9,35 @@ const offers = (await getCollection('offers')).sort((a, b) => a.data.order - b.d
   <h1>Services and prices</h1>
   <p>All prices are in US dollars (USD). Taxes, where they apply, are shown at checkout.</p>
   <div class="stack">
-    {
-      offers.map(({ data }) => (
-        <article class="card">
-          <p class="label text-ink-muted">{data.category}</p>
-          <h2>{data.name}</h2>
-          <p>{data.description}</p>
+    {offers.map(({ data }) => (
+      <article class="card">
+        <p class="label text-ink-muted">{data.category}</p>
+        <h2>{data.name}</h2>
+        <p>{data.description}</p>
+        <p>
+          <strong>{data.price_usd == null ? '[PENDING: price]' : `USD ${data.price_usd}`}</strong> {data.unit}
+        </p>
+        <p>
+          <strong>Delivery:</strong> {data.delivery}
+        </p>
+        {data.buy_url ? (
           <p>
-            <strong>{data.price_usd == null ? '[PENDING: price]' : `USD ${data.price_usd}`}</strong> {data.unit}
+            <a class="button" href={data.buy_url}>
+              Buy {data.name}
+            </a>
           </p>
-          <p><strong>Delivery:</strong> {data.delivery}</p>
-          {data.buy_url ? <p><a class="button" href={data.buy_url}>Buy {data.name}</a></p> : null}
-        </article>
-      ))
-    }
+        ) : null}
+      </article>
+    ))}
   </div>
   <section class="mt-12">
     <p>
       Before you buy, please read our <a href="/terms">Terms and Conditions</a> and our
       <a href="/refunds">Refund, Cancellation and Delivery Policy</a>. Questions? <a href="/contact">Contact us</a>.
     </p>
-    <p class="meta">Card payments are processed securely by Stripe, a PCI DSS certified provider, over an encrypted connection. We never see or store your card number.</p>
+    <p class="meta">
+      Card payments are processed securely by Stripe, a PCI DSS certified provider, over an encrypted connection. We
+      never see or store your card number.
+    </p>
   </section>
 </Base>

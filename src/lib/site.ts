@@ -12,5 +12,4 @@ export async function getPublishedPosts() {
 }
 
 // Content dates are UTC midnight: format them in UTC or they show a day early in the Americas.
-export const formatDate = (date: Date) =>
-  date.toLocaleDateString('en-US', { dateStyle: 'long', timeZone: 'UTC' });
+export const formatDate = (date: Date) => date.toLocaleDateString('en-US', { dateStyle: 'long', timeZone: 'UTC' });

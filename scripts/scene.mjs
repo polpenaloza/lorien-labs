@@ -44,7 +44,10 @@ const dither = (x, y, t) => t > (BAYER[y & 3][x & 3] + 0.5) / 16;
 
 // Sines with whole cycles across the width, so a layer drawn with it tiles seamlessly.
 const wave = (x, parts) =>
-  parts.reduce((sum, [amplitude, cycles, phase]) => sum + amplitude * Math.sin((2 * Math.PI * cycles * x) / W + phase), 0);
+  parts.reduce(
+    (sum, [amplitude, cycles, phase]) => sum + amplitude * Math.sin((2 * Math.PI * cycles * x) / W + phase),
+    0,
+  );
 
 function canvas() {
   const pixels = new Uint8Array(W * H * 4);
@@ -91,11 +94,19 @@ function sky() {
   for (let y = -MOON.r - 8; y <= MOON.r + 8; y++) {
     for (let x = -MOON.r - 8; x <= MOON.r + 8; x++) {
       const d = Math.hypot(x, y);
-      if (d > MOON.r && dither(MOON.x + x, MOON.y + y, (1 - (d - MOON.r) / 9) * 0.6)) c.set(MOON.x + x, MOON.y + y, 'hairline');
+      if (d > MOON.r && dither(MOON.x + x, MOON.y + y, (1 - (d - MOON.r) / 9) * 0.6))
+        c.set(MOON.x + x, MOON.y + y, 'hairline');
       if (d <= MOON.r) c.set(MOON.x + x, MOON.y + y, Math.hypot(x - 4, y + 3) > MOON.r ? 'muted' : 'paper');
     }
   }
-  for (const [x, y] of [[-4, 2], [-3, 2], [2, -5], [5, 4], [-6, -3]]) c.set(MOON.x + x, MOON.y + y, 'muted');
+  for (const [x, y] of [
+    [-4, 2],
+    [-3, 2],
+    [2, -5],
+    [5, 4],
+    [-6, -3],
+  ])
+    c.set(MOON.x + x, MOON.y + y, 'muted');
   return c;
 }
 
@@ -107,7 +118,13 @@ function stars(seed, count) {
     const y = Math.floor(rand() * 130);
     if (Math.hypot(x - MOON.x, y - MOON.y) < MOON.r + 12) continue;
     if (rand() < 0.1) {
-      for (const [dx, dy] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) c.set(x + dx, y + dy, 'accent');
+      for (const [dx, dy] of [
+        [-1, 0],
+        [1, 0],
+        [0, -1],
+        [0, 1],
+      ])
+        c.set(x + dx, y + dy, 'accent');
       c.set(x, y, 'paper');
     } else {
       c.set(x, y, rand() < 0.35 ? 'paper' : 'muted');
@@ -133,7 +150,8 @@ function ridge(points, roughness, rand) {
   for (let i = 1; i < line.length; i++) {
     const [ax, ay] = line[i - 1];
     const [bx, by] = line[i];
-    for (let x = Math.max(0, Math.ceil(ax)); x <= Math.min(W - 1, bx); x++) heights[x] = ay + ((by - ay) * (x - ax)) / (bx - ax || 1);
+    for (let x = Math.max(0, Math.ceil(ax)); x <= Math.min(W - 1, bx); x++)
+      heights[x] = ay + ((by - ay) * (x - ax)) / (bx - ax || 1);
   }
   return heights;
 }
@@ -164,14 +182,54 @@ function range(points, roughness, seed, snowline, colours) {
 
 const farRange = () =>
   range(
-    [[-12, 118], [26, 94], [68, 110], [108, 76], [146, 102], [178, 92], [204, 126], [240, 150], [276, 124], [306, 86], [338, 102], [392, 72], [428, 98], [462, 82], [492, 108]],
-    0.32, 7, 112, { body: 'hairline', lit: 'mist', snow: 'muted', rock: 'dusk' },
+    [
+      [-12, 118],
+      [26, 94],
+      [68, 110],
+      [108, 76],
+      [146, 102],
+      [178, 92],
+      [204, 126],
+      [240, 150],
+      [276, 124],
+      [306, 86],
+      [338, 102],
+      [392, 72],
+      [428, 98],
+      [462, 82],
+      [492, 108],
+    ],
+    0.32,
+    7,
+    112,
+    { body: 'hairline', lit: 'mist', snow: 'muted', rock: 'dusk' },
   );
 
 const nearRange = () =>
   range(
-    [[-12, 150], [18, 126], [58, 142], [96, 114], [136, 140], [166, 132], [194, 164], [222, 180], [240, 184], [258, 180], [286, 162], [318, 128], [352, 142], [394, 118], [432, 138], [470, 120], [492, 140]],
-    0.38, 13, 126, { body: 'dusk', lit: 'hairline', snow: 'muted', rock: 'navy' },
+    [
+      [-12, 150],
+      [18, 126],
+      [58, 142],
+      [96, 114],
+      [136, 140],
+      [166, 132],
+      [194, 164],
+      [222, 180],
+      [240, 184],
+      [258, 180],
+      [286, 162],
+      [318, 128],
+      [352, 142],
+      [394, 118],
+      [432, 138],
+      [470, 120],
+      [492, 140],
+    ],
+    0.38,
+    13,
+    126,
+    { body: 'dusk', lit: 'hairline', snow: 'muted', rock: 'navy' },
   );
 
 // The elven refuge at the head of the valley, where the river is born: halls with low gabled roofs
@@ -214,7 +272,8 @@ function valley() {
   };
   // A low gable: each row two pixels narrower, the eaves lit.
   const roof = (cx, y, half, step = 2) => {
-    for (let k = 0; half - k * step > 0; k++) line(c, cx - half + k * step, y - k, cx + half - k * step, y - k, k === 0 ? 'muted' : 'mist');
+    for (let k = 0; half - k * step > 0; k++)
+      line(c, cx - half + k * step, y - k, cx + half - k * step, y - k, k === 0 ? 'muted' : 'mist');
   };
   const hall = (x0, x1, floor, height) => {
     rect(x0, floor - height, x1, floor - 1, 'mist');
@@ -224,7 +283,11 @@ function valley() {
     }
     roof((x0 + x1) / 2, floor - height - 1, Math.round((x1 - x0) / 2) + 2);
   };
-  for (const [x0, x1, y] of [[x - 30, x + 30, base], [x - 26, x - 8, base - 7], [x + 8, x + 27, base - 6]]) {
+  for (const [x0, x1, y] of [
+    [x - 30, x + 30, base],
+    [x - 26, x - 8, base - 7],
+    [x + 8, x + 27, base - 6],
+  ]) {
     rect(x0, y, x1, y + 1, 'hairline');
     line(c, x0, y, x1, y, 'mist');
   }
@@ -288,7 +351,15 @@ const riverHalfWidth = (y) => 1 + (y - 186) * 0.24;
 function hills() {
   const c = canvas();
   const rand = random(11);
-  const ridge = (x) => Math.round(186 + wave(x, [[3, 2, 1], [2, 5, 0.3], [1, 11, 2]]));
+  const ridge = (x) =>
+    Math.round(
+      186 +
+        wave(x, [
+          [3, 2, 1],
+          [2, 5, 0.3],
+          [1, 11, 2],
+        ]),
+    );
   for (let x = 0; x < W; x++) for (let y = ridge(x); y < H; y++) c.set(x, y, 'dusk');
   // A far tree line along the ridge, kept clear where the river leaves the hills.
   for (let x = 0; x < W; x += 3 + Math.floor(rand() * 4)) {
@@ -325,13 +396,20 @@ function trunk(c, x, base, top, rand, { lean = 0, width = 3 } = {}) {
   for (let y = top; y <= base; y++) {
     const t = (y - top) / (base - top);
     const half = Math.round(((width - 1) / 2) * (0.4 + t) + Math.max(0, y - (base - 6)) * 0.7);
-    for (let dx = -half; dx <= half; dx++) c.set(at(y) + dx, y, dx === -half || (dx === 0 && rand() < 0.08) ? 'muted' : 'paper');
+    for (let dx = -half; dx <= half; dx++)
+      c.set(at(y) + dx, y, dx === -half || (dx === 0 && rand() < 0.08) ? 'muted' : 'paper');
   }
   return at;
 }
 
 function lantern(c, x, y) {
-  for (const [dx, dy] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) c.set(x + dx, y + dy, 'accent');
+  for (const [dx, dy] of [
+    [-1, 0],
+    [1, 0],
+    [0, -1],
+    [0, 1],
+  ])
+    c.set(x + dx, y + dy, 'accent');
   c.set(x, y, 'paper');
 }
 
@@ -339,8 +417,19 @@ const TREES = {
   // Tall, with crowns in widening tiers.
   tiered(c, rand, x, base, height) {
     const top = base - height;
-    for (const [rise, side] of [[0.3, -1], [0.34, 1], [0.4, -1], [0.44, 1]]) line(c, x, top + height * rise, x + side * 20, top + 22, 'paper');
-    for (const [drop, rx, ry] of [[4, 9, 5], [14, 17, 6], [25, 24, 7], [36, 19, 6]]) {
+    for (const [rise, side] of [
+      [0.3, -1],
+      [0.34, 1],
+      [0.4, -1],
+      [0.44, 1],
+    ])
+      line(c, x, top + height * rise, x + side * 20, top + 22, 'paper');
+    for (const [drop, rx, ry] of [
+      [4, 9, 5],
+      [14, 17, 6],
+      [25, 24, 7],
+      [36, 19, 6],
+    ]) {
       leaves(c, x - Math.round(rx * 0.5), top + drop, rx, ry, rand);
       leaves(c, x + Math.round(rx * 0.5), top + drop + 1, rx, ry, rand);
     }
@@ -352,7 +441,12 @@ const TREES = {
     const top = base - height;
     for (const side of [-1, 1]) line(c, x, top + 40, x + side * 14, top + 18, 'paper');
     leaves(c, x, top + 16, 22, 15, rand);
-    for (const [dx, dy, r] of [[-20, 24, 8], [19, 22, 9], [2, 2, 9]]) leaves(c, x + dx, top + dy, r, Math.round(r * 0.6), rand);
+    for (const [dx, dy, r] of [
+      [-20, 24, 8],
+      [19, 22, 9],
+      [2, 2, 9],
+    ])
+      leaves(c, x + dx, top + dy, r, Math.round(r * 0.6), rand);
     trunk(c, x, base, top + 28, rand, { width: 4 });
   },
   // Narrow and young: small clumps climbing the trunk.
@@ -374,7 +468,10 @@ const TREES = {
   twin(c, rand, x, base, height) {
     const top = base - height;
     const fork = Math.round(top + height * 0.5);
-    for (const [dx, crownTop, r] of [[-12, top + 6, 15], [13, top + 14, 13]]) {
+    for (const [dx, crownTop, r] of [
+      [-12, top + 6, 15],
+      [13, top + 14, 13],
+    ]) {
       line(c, x, fork, x + dx, crownTop + 8, 'paper');
       line(c, x + 1, fork, x + dx + 1, crownTop + 8, 'paper');
       leaves(c, x + dx, crownTop, r, Math.round(r * 0.55), rand);
@@ -399,7 +496,14 @@ function forest() {
   const c = canvas();
   const rand = random(23);
   // [shape, x, base, height]: the tallest stand at the sides, leaving the centre to the title and the valley.
-  const trees = [['tiered', 58, 236, 152], ['dome', 130, 230, 104], ['slender', 188, 226, 88], ['leaning', 286, 226, 84], ['twin', 350, 230, 116], ['umbrella', 424, 236, 148]];
+  const trees = [
+    ['tiered', 58, 236, 152],
+    ['dome', 130, 230, 104],
+    ['slender', 188, 226, 88],
+    ['leaning', 286, 226, 84],
+    ['twin', 350, 230, 116],
+    ['umbrella', 424, 236, 148],
+  ];
   for (const [shape, x, base, height] of trees) TREES[shape](c, rand, x, base, height);
   return c;
 }
@@ -407,7 +511,15 @@ function forest() {
 function foreground() {
   const c = canvas();
   const rand = random(31);
-  const ground = (x) => Math.round(240 + wave(x, [[4, 1, 0.5], [2, 3, 1.7], [1, 7, 0.2]]));
+  const ground = (x) =>
+    Math.round(
+      240 +
+        wave(x, [
+          [4, 1, 0.5],
+          [2, 3, 1.7],
+          [1, 7, 0.2],
+        ]),
+    );
   for (let x = 0; x < W; x++) {
     for (let y = ground(x); y < H; y++) c.set(x, y, 'navy');
     if (rand() < 0.45) for (let dy = 1; dy <= 1 + Math.floor(rand() * 3); dy++) c.set(x, ground(x) - dy, 'navy');
@@ -436,7 +548,8 @@ const LAYERS = {
 };
 
 mkdirSync('public/scene', { recursive: true });
-for (const [name, layer] of Object.entries(LAYERS)) writeFileSync(`public/scene/${name}.png`, encodePng(W, H, layer.pixels));
+for (const [name, layer] of Object.entries(LAYERS))
+  writeFileSync(`public/scene/${name}.png`, encodePng(W, H, layer.pixels));
 
 // Flatten every layer (both twinkle frames shown) into a ×2 preview for the design folder. Haze layers
 // blend as CSS `lighten` does: each channel keeps the brighter value.
@@ -449,7 +562,8 @@ for (const [name, layer] of Object.entries(LAYERS)) {
       const from = (Math.floor(y / SCALE) * W + Math.floor(x / SCALE)) * 4;
       const to = (y * W * SCALE + x) * 4;
       if (!layer.pixels[from + 3]) continue;
-      for (let k = 0; k < 4; k++) preview[to + k] = lighten ? Math.max(preview[to + k], layer.pixels[from + k]) : layer.pixels[from + k];
+      for (let k = 0; k < 4; k++)
+        preview[to + k] = lighten ? Math.max(preview[to + k], layer.pixels[from + k]) : layer.pixels[from + k];
     }
   }
 }

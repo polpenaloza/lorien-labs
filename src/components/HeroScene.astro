@@ -42,17 +42,15 @@ const fireflies = Array.from({ length: 16 }, (_, i) => ({
 
 <section class="scene" data-scene>
   <div class="layers" aria-hidden="true">
-    {
-      LAYERS.map(({ name, depth, effect }) => (
-        <div class:list={['layer', effect]} style={`--depth: ${depth}; background-image: url(/scene/${name}.png)`} />
-      ))
-    }
-    {fallingLeaves.map(({ x, duration, delay }) => <span class="leaf" style={`left: ${x}; --duration: ${duration}; --delay: ${delay}`} />)}
-    {
-      fireflies.map(({ x, y, duration, delay }) => (
-        <span class="firefly" style={`left: ${x}; --y: ${y}; --duration: ${duration}; --delay: ${delay}`} />
-      ))
-    }
+    {LAYERS.map(({ name, depth, effect }) => (
+      <div class:list={['layer', effect]} style={`--depth: ${depth}; background-image: url(/scene/${name}.png)`} />
+    ))}
+    {fallingLeaves.map(({ x, duration, delay }) => (
+      <span class="leaf" style={`left: ${x}; --duration: ${duration}; --delay: ${delay}`} />
+    ))}
+    {fireflies.map(({ x, y, duration, delay }) => (
+      <span class="firefly" style={`left: ${x}; --y: ${y}; --duration: ${duration}; --delay: ${delay}`} />
+    ))}
   </div>
   <div class="content">
     <slot />
@@ -65,14 +63,18 @@ const fireflies = Array.from({ length: 16 }, (_, i) => ({
        most 80svh tall, so on phones it stays short and the text above it stays off the mountains. */
     --art: max(56.25vw + 24px, min(80svh, 150vw));
     --px: calc(var(--art) / 270);
+
     /* How far the art overhangs each side of the screen: the most a layer can pan without a gap. */
     --slack: calc((var(--art) * 16 / 9 - 100vw) / 2);
+
     position: relative;
     box-sizing: border-box; /* min-height counts the padding below, so the art is never taller than the scene */
     min-height: var(--art);
+
     /* The text sits in the flow above the art's mountains, which start about a quarter of the way down. */
     padding-bottom: calc(var(--art) * 0.78);
     overflow: hidden;
+
     /* Night in both themes: inside the scene every token resolves to its dark value. */
     color-scheme: dark;
     background: var(--surface-000);
@@ -126,7 +128,9 @@ const fireflies = Array.from({ length: 16 }, (_, i) => ({
 
   .leaf {
     top: calc(-4 * var(--px));
+
     --fall: calc(var(--art) * 1.6);
+
     width: calc(2 * var(--px));
     height: calc(2 * var(--px));
     background: var(--brand-leaf);
@@ -176,13 +180,16 @@ const fireflies = Array.from({ length: 16 }, (_, i) => ({
     25% {
       transform: translate(calc(6 * var(--px)), calc(var(--fall) * 0.25));
     }
+
     50% {
       transform: translate(calc(-2 * var(--px)), calc(var(--fall) * 0.5));
     }
+
     75% {
       transform: translate(calc(5 * var(--px)), calc(var(--fall) * 0.75));
     }
-    to {
+
+    100% {
       transform: translate(0, var(--fall));
     }
   }
@@ -192,6 +199,7 @@ const fireflies = Array.from({ length: 16 }, (_, i) => ({
     60% {
       opacity: 1;
     }
+
     70% {
       opacity: 0;
     }
@@ -214,9 +222,13 @@ const fireflies = Array.from({ length: 16 }, (_, i) => ({
   /* The scroll parallax is native CSS. Browsers without scroll-driven animations show a still scene. */
   @supports (animation-timeline: scroll()) {
     .layer {
-      animation: var(--loop, none), sink linear both;
+      animation:
+        var(--loop, none),
+        sink linear both;
       animation-timeline: auto, scroll(root);
-      animation-range: normal, 0 100svh;
+      animation-range:
+        normal,
+        0 100svh;
     }
 
     .content {

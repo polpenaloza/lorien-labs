@@ -17,54 +17,54 @@ const latestPosts = (await getPublishedPosts()).slice(0, 3);
     <h1 class="m-0 text-heading-1 sm:text-display">Lorien Labs</h1>
     <p>{business.description}</p>
     <!-- The hero is navy in both themes, so its button can't take the themed accent. -->
-    <a class="button bg-brand-paper text-brand-navy" href="/services">See services and prices</a>
+    <a class="button bg-brand-paper text-brand-navy" href="/services">
+      See services and prices
+    </a>
   </HeroScene>
 
   <section class="mt-12">
     <h2>What we sell</h2>
     <div class="cards">
-      {
-        offers.map(({ data }) => (
-          <article class="card">
-            <p class="label text-ink-muted">{data.category}</p>
-            <h3>{data.name}</h3>
-            <p>{data.description}</p>
-          </article>
-        ))
-      }
+      {offers.map(({ data }) => (
+        <article class="card">
+          <p class="label text-ink-muted">{data.category}</p>
+          <h3>{data.name}</h3>
+          <p>{data.description}</p>
+        </article>
+      ))}
     </div>
   </section>
 
   <section class="mt-12">
     <h2>Our channels</h2>
     <div class="cards">
-      {
-        channels.map(({ data }) => (
-          <article class="card">
-            <h3><a href={data.youtube}>{data.name}</a></h3>
-            <p>{data.description}</p>
-          </article>
-        ))
-      }
+      {channels.map(({ data }) => (
+        <article class="card">
+          <h3>
+            <a href={data.youtube}>{data.name}</a>
+          </h3>
+          <p>{data.description}</p>
+        </article>
+      ))}
     </div>
   </section>
 
   <section class="mt-12">
     <h2>Latest from the blog</h2>
-    {
-      latestPosts.length > 0 ? (
-        <div class="stack">
-          {latestPosts.map((post) => (
-            <article class="card">
-              <p class="meta">{formatDate(post.data.date)}</p>
-              <h3><a href={`/blog/${post.id}`}>{post.data.title}</a></h3>
-              <p>{post.data.summary}</p>
-            </article>
-          ))}
-        </div>
-      ) : (
-        <p>The first posts are on their way.</p>
-      )
-    }
+    {latestPosts.length > 0 ? (
+      <div class="stack">
+        {latestPosts.map((post) => (
+          <article class="card">
+            <p class="meta">{formatDate(post.data.date)}</p>
+            <h3>
+              <a href={`/blog/${post.id}`}>{post.data.title}</a>
+            </h3>
+            <p>{post.data.summary}</p>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <p>The first posts are on their way.</p>
+    )}
   </section>
 </Base>

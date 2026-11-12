@@ -1,4 +1,5 @@
 /* Element defaults, which CMS Markdown relies on: it can't carry classes. Everything else is UnoCSS (uno.config.ts). */
+
 /* A column at least a screen tall: <main> takes the leftover height, so the footer sits at the bottom. */
 body {
   display: flex;

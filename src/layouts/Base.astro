@@ -26,67 +26,77 @@ const { title, description = business.description } = Astro.props;
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=VT323&family=Silkscreen&display=swap"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&family=Silkscreen&display=swap" />
   </head>
   <body>
     <header class="site-header sticky top-0 z-10 bg-surface-100">
       <div class="wrap flex flex-wrap items-center justify-between gap-4 py-2 sm:py-4">
-      <a href="/" class="inline-flex items-center gap-2 text-ink font-display text-heading-2 no-underline">
-        <!-- Transparent mark: the paper tree on dark pages, its navy twin on light ones. -->
-        <picture>
-          <source srcset="/logo-light.png" media="(prefers-color-scheme: light)" />
-          <img class="mark block" src="/logo.png" alt="" width="49" height="49" />
-        </picture>
-        <!-- The header stays on screen, so on phones it keeps to one row: the tree alone, the name for screen readers. -->
-        <span class="sr-only sm:not-sr-only">Lorien Labs</span>
-      </a>
-      <nav aria-label="Main" class="flex flex-wrap items-center gap-4">
-        <a class="text-ink" href="/services">Services</a>
-        <a class="text-ink" href="/blog">Blog</a>
-        <a class="text-ink" href="/about">About</a>
-        <a class="text-ink" href="/contact">Contact</a>
-      </nav>
+        <a href="/" class="inline-flex items-center gap-2 text-heading-2 text-ink font-display no-underline">
+          <!-- Transparent mark: the paper tree on dark pages, its navy twin on light ones. -->
+          <picture>
+            <source srcset="/logo-light.png" media="(prefers-color-scheme: light)" />
+            <img class="mark block" src="/logo.png" alt="" width="49" height="49" />
+          </picture>
+          <!-- The header stays on screen, so on phones it keeps to one row: the tree alone, the name for screen readers. -->
+          <span class="sr-only sm:not-sr-only">Lorien Labs</span>
+        </a>
+        <nav aria-label="Main" class="flex flex-wrap items-center gap-4">
+          <a class="text-ink" href="/services">
+            Services
+          </a>
+          <a class="text-ink" href="/blog">
+            Blog
+          </a>
+          <a class="text-ink" href="/about">
+            About
+          </a>
+          <a class="text-ink" href="/contact">
+            Contact
+          </a>
+        </nav>
       </div>
     </header>
     <!-- flex-1 takes the leftover height, so the footer sits at the bottom of short pages. -->
     <main class="flex-1">
       <slot name="hero" />
-      <div class="wrap"><slot /></div>
-    </main>
-    <footer class="mt-12 border-0 border-t border-solid border-hairline">
-      <div class="wrap grid grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] gap-6 py-12">
-      <div>
-        <p class="label m-0">Company</p>
-        <p class="m-0">
-          <strong>{business.legal_name}</strong><br />
-          {business.address}<br />
-          <a href={`mailto:${business.email}`}>{business.email}</a><br />
-          <a href={`tel:${business.phone}`}>{business.phone}</a>
-        </p>
+      <div class="wrap">
+        <slot />
       </div>
-      <nav aria-label="Legal" class="flex flex-col gap-1">
-        <p class="label m-0">Legal</p>
-        <a href="/terms">Terms and Conditions</a>
-        <a href="/privacy">Privacy Policy</a>
-        <a href="/refunds">Refund, Cancellation and Delivery Policy</a>
-        <a href="/contact">Contact</a>
-      </nav>
-      <nav aria-label="Channels" class="flex flex-col gap-1">
-        <p class="label m-0">Channels</p>
-        {
-          channels.map(({ data }) => (
+    </main>
+    <footer class="mt-12 border-0 border-t border-hairline border-solid">
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] wrap gap-6 py-12">
+        <div>
+          <p class="m-0 label">Company</p>
+          <p class="m-0">
+            <strong>{business.legal_name}</strong>
+            <br />
+            {business.address}
+            <br />
+            <a href={`mailto:${business.email}`}>{business.email}</a>
+            <br />
+            <a href={`tel:${business.phone}`}>{business.phone}</a>
+          </p>
+        </div>
+        <nav aria-label="Legal" class="flex flex-col gap-1">
+          <p class="m-0 label">Legal</p>
+          <a href="/terms">Terms and Conditions</a>
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/refunds">Refund, Cancellation and Delivery Policy</a>
+          <a href="/contact">Contact</a>
+        </nav>
+        <nav aria-label="Channels" class="flex flex-col gap-1">
+          <p class="m-0 label">Channels</p>
+          {channels.map(({ data }) => (
             <>
               <a href={data.youtube}>{data.name} on YouTube</a>
               {data.instagram ? <a href={data.instagram}>{data.name} on Instagram</a> : null}
               {data.tiktok ? <a href={data.tiktok}>{data.name} on TikTok</a> : null}
             </>
-          ))
-        }
-      </nav>
-      <p class="meta col-span-full m-0">Card payments are processed securely by Stripe. We never see or store your card number.</p>
+          ))}
+        </nav>
+        <p class="col-span-full m-0 meta">
+          Card payments are processed securely by Stripe. We never see or store your card number.
+        </p>
       </div>
     </footer>
     <!-- Inline, so blocks are tagged before the first paint and nothing flashes. -->

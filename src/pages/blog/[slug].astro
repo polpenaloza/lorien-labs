@@ -20,26 +20,25 @@ const channel = await getEntry(post.data.channel);
       {formatDate(post.data.date)} · <a href={channel.data.youtube}>{channel.data.name}</a>
     </p>
     <h1>{post.data.title}</h1>
-    <div class="aspect-video my-6">
+    <div class="my-6 aspect-video">
       <iframe
-        class="w-full h-full border-0"
+        class="h-full w-full border-0"
         src={`https://www.youtube-nocookie.com/embed/${youtubeId(post.data.video_url)}`}
         title={post.data.title}
         loading="lazy"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen></iframe>
+        allowfullscreen
+      ></iframe>
     </div>
     <Content />
     <h2>Sources</h2>
     <ul>
-      {
-        post.data.sources.map((source) => (
-          <li>
-            {source.url ? <a href={source.url}>{source.title}</a> : source.title}
-            <span class="tag">{source.type}</span>
-          </li>
-        ))
-      }
+      {post.data.sources.map((source) => (
+        <li>
+          {source.url ? <a href={source.url}>{source.title}</a> : source.title}
+          <span class="tag">{source.type}</span>
+        </li>
+      ))}
     </ul>
   </article>
 </Base>

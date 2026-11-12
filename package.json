@@ -15,15 +15,31 @@
     "test": "node --test scripts/youtube.test.mjs",
     "check:stripe": "node scripts/check-stripe.mjs",
     "logo": "node scripts/logo.mjs",
-    "scene": "node scripts/scene.mjs"
+    "scene": "node scripts/scene.mjs",
+    "lint": "eslint . --max-warnings 0 && stylelint '**/*.{css,astro}'",
+    "lint:fix": "eslint . --fix && stylelint '**/*.{css,astro}' --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check"
   },
   "dependencies": {
     "astro": "7.4.4"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
+    "@eslint/js": "10.0.1",
     "@unocss/astro": "66.12.0",
+    "@unocss/eslint-config": "66.12.0",
+    "eslint": "10.14.0",
+    "eslint-plugin-astro": "3.2.1",
+    "globals": "17.14.0",
+    "postcss-html": "2.0.0",
+    "prettier": "3.10.0",
+    "prettier-plugin-astro": "1.1.2",
+    "stylelint": "18.0.0",
+    "stylelint-config-html": "2.0.0",
+    "stylelint-config-standard": "41.0.0",
     "typescript": "6.0.3",
+    "typescript-eslint": "8.72.2",
     "unocss": "66.12.0",
     "wrangler": "4.156.1"
   }
