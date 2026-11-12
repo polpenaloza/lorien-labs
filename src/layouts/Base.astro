@@ -21,7 +21,8 @@ const { title, description = business.description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <title>{title} | {business.legal_name}</title>
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/png" href="/favicon.png" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" type="image/png" href="/favicon-light.png" media="(prefers-color-scheme: light)" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -33,8 +34,11 @@ const { title, description = business.description } = Astro.props;
   <body>
     <header class="wrap flex flex-wrap items-center justify-between gap-4 py-4">
       <a href="/" class="inline-flex items-center gap-2 text-ink font-display text-heading-2 no-underline">
-        <!-- On paper the mark needs its navy tile. On the dark page the tile disappears, so it needs no padding. -->
-        <img class="mark light:p-4" src="/logo.png" alt="" width="49" height="49" />Lorien Labs
+        <!-- Transparent mark: the paper tree on dark pages, its navy twin on light ones. -->
+        <picture>
+          <source srcset="/logo-light.png" media="(prefers-color-scheme: light)" />
+          <img class="mark block" src="/logo.png" alt="" width="49" height="49" />
+        </picture>Lorien Labs
       </a>
       <nav aria-label="Main" class="flex flex-wrap items-center gap-4">
         <a class="text-ink" href="/services">Services</a>

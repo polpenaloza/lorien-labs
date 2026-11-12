@@ -68,22 +68,30 @@ const GRID = LEFT_HALF.map((row) => {
   return row + [...row.slice(0, -1)].reverse().join('');
 });
 
+// For light pages: the paper pixels in navy, so the tree still reads on paper without a tile.
+const ON_LIGHT = { ...COLOURS, P: COLOURS['.'] };
+
 // `size` adds navy around the upscaled grid, for sizes that are not a multiple of the grid.
-// `ground: false` leaves the navy transparent: CSS gives the mark its navy tile where it needs one.
-function render(scale, size = GRID.length * scale, { ground = true } = {}) {
+// `ground: false` leaves the navy transparent.
+function render(scale, size = GRID.length * scale, { ground = true, colours = COLOURS } = {}) {
   const offset = Math.floor((size - GRID.length * scale) / 2);
   const pixels = new Uint8Array(size * size * 4);
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       const gridRow = GRID[Math.floor((y - offset) / scale)];
       const pixel = gridRow?.[Math.floor((x - offset) / scale)] ?? '.';
-      if (ground || pixel !== '.') pixels.set([...COLOURS[pixel], 255], (y * size + x) * 4);
+      if (ground || pixel !== '.') pixels.set([...colours[pixel], 255], (y * size + x) * 4);
     }
   }
   return encodePng(size, size, pixels);
 }
 
-writeFileSync('design/assets/lorien-labs-mark.png', render(16));
-writeFileSync('public/logo.png', render(4, undefined, { ground: false }));
-writeFileSync('public/favicon.png', render(1));
+// Every mark is transparent. Only the touch icon keeps its navy: iOS fills transparency with black.
+const clear = { ground: false };
+const clearOnLight = { ground: false, colours: ON_LIGHT };
+writeFileSync('design/assets/lorien-labs-mark.png', render(16, undefined, clear));
+writeFileSync('public/logo.png', render(4, undefined, clear));
+writeFileSync('public/logo-light.png', render(4, undefined, clearOnLight));
+writeFileSync('public/favicon.png', render(1, undefined, clear));
+writeFileSync('public/favicon-light.png', render(1, undefined, clearOnLight));
 writeFileSync('public/apple-touch-icon.png', render(3, 180));

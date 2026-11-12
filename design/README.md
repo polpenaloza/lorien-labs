@@ -6,10 +6,10 @@ Lorien Labs is a tree with its roots showing: steady, grown rather than assemble
 
 ## Logo
 
-- The mark is pixel art: a 49×49 grid in `scripts/logo.mjs`. `pnpm logo` writes `assets/lorien-labs-mark.png` and the sized copies for the site (`public/logo.png`, `public/favicon.png`, `public/apple-touch-icon.png`). Show it only at multiples of 49px, with `image-rendering: pixelated`, so every pixel stays square.
-- It is an off-white tree with leaf-blue leaves and a leaf-blue root arc. In `assets/`, the favicon and the touch icon it sits on its own navy square; `public/logo.png` is transparent, so it works on the hero's night sky and on `brand-navy` or `surface-100` (dark theme).
-- On a light page, set the mark inside a `brand-navy` tile with at least `space-4` of navy around the tree. Never place the PNG directly on paper.
-- Never recolour, outline, crop the roots or add a shadow to the mark. There is no wordmark file yet: when you need the name, set "Lorien Labs" in `display` (or `heading-1`) in `ink` beside the mark.
+- The mark is pixel art: a 49×49 grid in `scripts/logo.mjs`. `pnpm logo` writes `assets/lorien-labs-mark.png` and the sized copies for the site (`public/logo.png`, `public/logo-light.png`, `public/favicon.png`, `public/favicon-light.png`, `public/apple-touch-icon.png`). Show it only at multiples of 49px, with `image-rendering: pixelated`, so every pixel stays square.
+- It is an off-white tree with leaf-blue leaves and a leaf-blue root arc. Every mark is transparent: never put it on a tile or a background colour. The only exception is the touch icon, which keeps its navy square because iOS fills transparency with black.
+- On dark grounds (the hero's night sky, `surface-100` in the dark theme) use the off-white tree (`logo.png`, `favicon.png`). On light ones use its twin with the off-white drawn in `brand-navy` (`logo-light.png`, `favicon-light.png`), switched by `prefers-color-scheme`.
+- Never recolour beyond that light twin, outline, crop the roots or add a shadow to the mark. There is no wordmark file yet: when you need the name, set "Lorien Labs" in `display` (or `heading-1`) in `ink` beside the mark.
 
 ## Hero scene
 
