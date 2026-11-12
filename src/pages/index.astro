@@ -12,7 +12,7 @@ const latestPosts = (await getPublishedPosts()).slice(0, 3);
 
 <Base title="Software, digital products and videos">
   <HeroScene slot="hero">
-    <img class="[image-rendering:pixelated]" src="/logo.png" alt="Lorien Labs logo: a tree with its roots showing" width="98" height="98" />
+    <img class="mark" src="/logo.png" alt="Lorien Labs logo: a tree with its roots showing" width="98" height="98" />
     <!-- One step down the type scale on phones, not fluid: 64px "Lorien Labs" overflows the narrow ones. -->
     <h1 class="m-0 text-heading-1 sm:text-display">Lorien Labs</h1>
     <p>{business.description}</p>
@@ -20,7 +20,7 @@ const latestPosts = (await getPublishedPosts()).slice(0, 3);
     <a class="button bg-brand-paper text-brand-navy" href="/services">See services and prices</a>
   </HeroScene>
 
-  <section class="mt-12 reveal">
+  <section class="mt-12">
     <h2>What we sell</h2>
     <div class="cards">
       {
@@ -35,7 +35,7 @@ const latestPosts = (await getPublishedPosts()).slice(0, 3);
     </div>
   </section>
 
-  <section class="mt-12 reveal">
+  <section class="mt-12">
     <h2>Our channels</h2>
     <div class="cards">
       {
@@ -49,7 +49,7 @@ const latestPosts = (await getPublishedPosts()).slice(0, 3);
     </div>
   </section>
 
-  <section class="mt-12 reveal">
+  <section class="mt-12">
     <h2>Latest from the blog</h2>
     {
       latestPosts.length > 0 ? (

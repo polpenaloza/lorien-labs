@@ -35,7 +35,7 @@ export default defineConfig({
   },
   shortcuts: {
     wrap: 'mx-auto max-w-page px-4 sm:px-8',
-    mark: 'bg-brand-navy [image-rendering:pixelated]',
+    mark: '[image-rendering:pixelated]',
     button: 'inline-block px-4 py-2 rounded-md bg-accent text-on-accent font-semibold no-underline',
     cards: 'grid grid-cols-[repeat(auto-fit,minmax(min(20rem,100%),1fr))] gap-6',
     stack: 'flex flex-col gap-6',
