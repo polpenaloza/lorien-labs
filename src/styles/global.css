@@ -1,5 +1,10 @@
 /* Element defaults, which CMS Markdown relies on: it can't carry classes. Everything else is UnoCSS (uno.config.ts). */
 
+/* Anchor jumps and keyboard focus stop below the sticky header (81px tall at most), not under it. */
+html {
+  scroll-padding-top: 96px;
+}
+
 /* A column at least a screen tall: <main> takes the leftover height, so the footer sits at the bottom. */
 body {
   display: flex;

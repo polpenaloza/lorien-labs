@@ -6,14 +6,14 @@ Lorien Labs is a tree with its roots showing: steady, grown rather than assemble
 
 ## Logo
 
-- The mark is pixel art: a 49×49 grid in `scripts/logo.mjs`. `pnpm logo` writes `assets/lorien-labs-mark.png` and the sized copies for the site (`public/logo.png`, `public/logo-light.png`, `public/favicon.png`, `public/favicon-light.png`, `public/apple-touch-icon.png`). Show it only at multiples of 49px, with `image-rendering: pixelated`, so every pixel stays square.
+- The mark is pixel art: a 49×49 grid in `scripts/logo.mjs`. `pnpm logo` writes `assets/lorien-labs-mark.png` and the sized copies for the site (`public/logo.png`, `public/logo-light.png`, `public/favicon.svg`, `public/apple-touch-icon.png`). Show it only at multiples of 49px, with `image-rendering: pixelated`, so every pixel stays square.
 - It is an off-white tree with leaf-blue leaves and a leaf-blue root arc. Every mark is transparent: never put it on a tile or a background colour. The only exception is the touch icon, which keeps its navy square because iOS fills transparency with black.
-- On dark grounds (the hero's night sky, `surface-100` in the dark theme) use the off-white tree (`logo.png`, `favicon.png`). On light ones use its twin with the off-white drawn in `brand-navy` (`logo-light.png`, `favicon-light.png`), switched by `prefers-color-scheme`.
+- On dark grounds (the hero's night sky, `surface-100` in the dark theme) use the off-white tree (`logo.png`). On light ones use its twin with the off-white drawn in `brand-navy` (`logo-light.png`), switched by `prefers-color-scheme`. `favicon.svg` carries both and switches itself.
 - Never recolour beyond that light twin, outline, crop the roots or add a shadow to the mark. There is no wordmark file yet: when you need the name, set "Lorien Labs" in `display` (or `heading-1`) in `ink` beside the mark.
 
 ## Hero scene
 
-- The home hero is a night forest drawn by `scripts/scene.mjs`: silver trees, snowy mountains, a river, an elven refuge in the valley, the moon. `pnpm scene` writes one transparent 480×270 layer per depth to `public/scene/` and a flat preview to `assets/hero-scene.png`.
+- The home hero is a night forest drawn by `scripts/scene.mjs`: silver trees, snowy mountains, a river, an elven refuge in the valley, the moon. `pnpm scene` writes one transparent 480×270 layer per depth to `public/scene/`, a flat preview to `assets/hero-scene.png` and the link preview image `public/og.png`.
 - It uses only the palette's dark values, so the scene is night in both themes. Pixel art has no blends: gradients and fades are ordered dithering, glows are a ring of pixels.
 - `src/components/HeroScene.astro` stacks the layers. Each has a `depth`: how far it sinks and pans while the page scrolls, and how far it leans from the pointer. Haze drifts, stars, river and waterfalls twinkle, leaves fall and fireflies blink. All of it stops for reduced motion.
 - Haze is translucent the pixel art way, after lorien-studio's renderer: wisps blended with `mix-blend-mode: lighten` lift every darker colour behind them a step and let brighter ones (snow, trunks, lanterns) cut through, so the result stays on the palette.
@@ -32,7 +32,7 @@ Lorien Labs is a tree with its roots showing: steady, grown rather than assemble
 
 - Pixel faces are for short, large text; reading text gets a plain one. **VT323** sets `display`, `heading-1` and `heading-2`: titles, banners and the name beside the mark. It is drawn on a 16px grid and has one weight, so keep it at multiples of 16px and never bold: anything else blurs its pixels. **Silkscreen** sets `label` only, in capitals: eyebrows, tags and table headers. The **body** face (`system-ui`) sets `body`, `body-strong` and `small`: paragraphs, card titles, buttons, navigation and the footer.
 - Never set a sentence in a pixel face.
-- Load both pixel faces from Google Fonts: `https://fonts.googleapis.com/css2?family=VT323&family=Silkscreen&display=swap`. The body face needs no download.
+- Both pixel faces come from Google Fonts but are self-hosted: `fonts` in `astro.config.mjs` downloads them at build time and gives them fallbacks with matching metrics, so text doesn't jump when they load. The body face needs no download.
 - Use one `display` per page, `heading-1` for page titles, `heading-2` for sections and `body` for running text. Don't set long copy below 16px. Keep `small` for captions in `ink-muted`.
 - Keep sizes on the scale. Pixel faces render sharpest at their set sizes, so don't scale type fluidly.
 

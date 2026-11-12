@@ -8,9 +8,34 @@ const business = await getBusiness();
 const channels = await getCollection('channels');
 const offers = (await getCollection('offers')).sort((a, b) => a.data.order - b.data.order);
 const latestPosts = (await getPublishedPosts()).slice(0, 3);
+// Structured data for search engines (schema.org).
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${Astro.site}#organization`,
+      name: business.legal_name,
+      url: Astro.site,
+      // Google wants a logo that reads on white, at least 112px: the touch icon's navy square.
+      logo: new URL('/apple-touch-icon.png', Astro.site),
+      description: business.description,
+      email: business.email,
+      telephone: business.phone,
+      address: business.address,
+    },
+    {
+      '@type': 'WebSite',
+      name: 'Lorien Labs',
+      url: Astro.site,
+      publisher: { '@id': `${Astro.site}#organization` },
+    },
+  ],
+});
 ---
 
 <Base title="Software, digital products and videos">
+  <script is:inline slot="head" type="application/ld+json" set:html={jsonLd} />
   <HeroScene slot="hero">
     <img class="mark" src="/logo.png" alt="Lorien Labs logo: a tree with its roots showing" width="98" height="98" />
     <!-- One step down the type scale on phones, not fluid: 64px "Lorien Labs" overflows the narrow ones. -->

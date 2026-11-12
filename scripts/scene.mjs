@@ -1,6 +1,6 @@
 // The hero scene: a night forest of silver trees under snowy mountains, drawn by code in pixel art.
 // Every colour is a design token. `pnpm scene` writes one transparent PNG per parallax layer to
-// public/scene/ and a flattened preview to design/assets/hero-scene.png.
+// public/scene/, a flattened preview to design/assets/hero-scene.png and the link preview image public/og.png.
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { encodePng } from './png.mjs';
 
@@ -551,20 +551,25 @@ mkdirSync('public/scene', { recursive: true });
 for (const [name, layer] of Object.entries(LAYERS))
   writeFileSync(`public/scene/${name}.png`, encodePng(W, H, layer.pixels));
 
-// Flatten every layer (both twinkle frames shown) into a ×2 preview for the design folder. Haze layers
+// Flatten every layer (both twinkle frames shown) into one image, scaled up whole pixels. Haze layers
 // blend as CSS `lighten` does: each channel keeps the brighter value.
-const SCALE = 2;
-const preview = new Uint8Array(W * SCALE * H * SCALE * 4);
-for (const [name, layer] of Object.entries(LAYERS)) {
-  const lighten = name.startsWith('haze');
-  for (let y = 0; y < H * SCALE; y++) {
-    for (let x = 0; x < W * SCALE; x++) {
-      const from = (Math.floor(y / SCALE) * W + Math.floor(x / SCALE)) * 4;
-      const to = (y * W * SCALE + x) * 4;
-      if (!layer.pixels[from + 3]) continue;
-      for (let k = 0; k < 4; k++)
-        preview[to + k] = lighten ? Math.max(preview[to + k], layer.pixels[from + k]) : layer.pixels[from + k];
+function flatten(scale) {
+  const image = new Uint8Array(W * scale * H * scale * 4);
+  for (const [name, layer] of Object.entries(LAYERS)) {
+    const lighten = name.startsWith('haze');
+    for (let y = 0; y < H * scale; y++) {
+      for (let x = 0; x < W * scale; x++) {
+        const from = (Math.floor(y / scale) * W + Math.floor(x / scale)) * 4;
+        const to = (y * W * scale + x) * 4;
+        if (!layer.pixels[from + 3]) continue;
+        for (let k = 0; k < 4; k++)
+          image[to + k] = lighten ? Math.max(image[to + k], layer.pixels[from + k]) : layer.pixels[from + k];
+      }
     }
   }
+  return encodePng(W * scale, H * scale, image);
 }
-writeFileSync('design/assets/hero-scene.png', encodePng(W * SCALE, H * SCALE, preview));
+
+writeFileSync('design/assets/hero-scene.png', flatten(2));
+// The link preview image (Open Graph): 1440×810, the size Base.astro declares.
+writeFileSync('public/og.png', flatten(3));
