@@ -13,5 +13,5 @@ export default defineConfig(
   astro.configs.recommended,
   unocss,
   { files: ['scripts/**', '*.config.*'], languageOptions: { globals: globals.node } },
-  { files: ['**/*.astro'], languageOptions: { globals: globals.browser } },
+  { files: ['**/*.astro', 'src/scripts/**'], languageOptions: { globals: globals.browser } },
 );

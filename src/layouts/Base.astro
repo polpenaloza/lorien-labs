@@ -2,6 +2,7 @@
 import { Font } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import { getBusiness, pagePath } from '../lib/site';
+import revealScript from '../scripts/reveal.js?raw';
 import '../styles/tokens.css';
 import '../styles/global.css';
 
@@ -133,32 +134,6 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
         </p>
       </div>
     </footer>
-    <!-- Inline, so blocks are tagged before the first paint and nothing flashes. -->
-    <script is:inline>
-      // Blocks fade up the first time they scroll into view; ones that enter together stagger.
-      // ponytail: tagged by selector, not by class, so CMS Markdown (which can't carry classes) reveals too.
-      if (matchMedia('(prefers-reduced-motion: no-preference)').matches) {
-        const io = new IntersectionObserver(
-          (entries) => {
-            entries
-              .filter((entry) => entry.isIntersecting)
-              .forEach(({ target }, i) => {
-                target.style.setProperty('--delay', `${Math.min(i, 6) * 70}ms`);
-                target.dataset.reveal = 'shown';
-                io.unobserve(target);
-              });
-          },
-          { threshold: 0.1 },
-        );
-        document
-          .querySelectorAll(
-            'main :is(h1, h2, h3, p, ul, ol, dl, pre, blockquote, .card, .panel, .aspect-video):not([data-scene] *, .card *, .panel *, li *), footer .wrap > *',
-          )
-          .forEach((el) => {
-            el.dataset.reveal = '';
-            io.observe(el);
-          });
-      }
-    </script>
+    <script is:inline set:html={revealScript} />
   </body>
 </html>
